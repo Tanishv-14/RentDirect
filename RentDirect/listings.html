@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Student PGs | RentDirect Faridabad</title>
+  <meta name="description" content="Explore verified student PGs and hostels near Manav Rachna and other Faridabad colleges.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .listings-page-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .filter-sidebar {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      height: fit-content;
+      position: sticky;
+      top: 90px;
+    }
+
+    .filter-section {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .filter-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .filter-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--brand-neutral);
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .filter-results-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .active-badge-pill {
+      background: var(--brand-primary-light);
+      color: var(--brand-primary);
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 1rem;
+      background: #fff;
+      border-radius: var(--radius-lg);
+      border: 1px dashed var(--border-color);
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: 900px) {
+      .listings-page-layout {
+        grid-template-columns: 1fr;
+      }
+      .filter-sidebar {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================
+       HEADER & NAVIGATION
+       ========================================== -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="brand-logo">
+          <div class="brand-logo-icon">RD</div>
+          Rent<span>Direct</span>
+        </a>
+
+        <!-- Clean, Spacious Navigation Links -->
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="listings.html" class="nav-link active">Browse PGs</a></li>
+          <li><a href="index.html#colleges" class="nav-link">Colleges</a></li>
+          <li><a href="student-register.html" class="nav-link">For Students</a></li>
+          <li><a href="owner-register.html" class="nav-link">For PG Owners</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <a href="owner-register.html" class="btn btn-primary btn-sm">+ List Your PG</a>
+          <button class="mobile-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       PAGE HEADER / BANNER
+       ========================================== -->
+  <section style="background: var(--bg-surface-alt); padding: 2.5rem 0; border-bottom: 1px solid var(--border-color);">
+    <div class="container">
+      <h1 style="font-size: 2rem; font-weight: 800; color: var(--brand-neutral); margin-bottom: 0.4rem;">
+        Student PGs & Hostels in Faridabad
+      </h1>
+      <p style="color: var(--text-secondary); font-size: 0.95rem;">
+        Showing verified accommodations near Manav Rachna (Sector 43), JC Bose YMCA, Lingaya's, and neighboring campus areas.
+      </p>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       MAIN CONTENT: FILTERS + LISTINGS GRID
+       ========================================== -->
+  <main class="container" style="margin-bottom: 4rem;">
+    <div class="listings-page-layout">
+
+      <!-- LEFT: FILTERS SIDEBAR -->
+      <aside class="filter-sidebar">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+          <h2 style="font-size: 1.1rem; font-weight: 800; color: var(--brand-neutral);">Filters</h2>
+          <button id="reset-filters-btn" class="btn btn-ghost btn-sm" style="color: var(--brand-primary); padding: 0.2rem 0.5rem;">
+            Reset All
+          </button>
+        </div>
+
+        <!-- Keyword Search -->
+        <div class="filter-section">
+          <label class="filter-title" for="filter-search">Keyword / Locality</label>
+          <input type="text" id="filter-search" class="form-control" placeholder="e.g. Sector 43, AC, WiFi" />
+        </div>
+
+        <!-- College Filter -->
+        <div class="filter-section">
+          <label class="filter-title" for="filter-college">Near College Campus</label>
+          <select id="filter-college" class="form-control select-college" data-placeholder="All Faridabad Colleges">
+            <option value="all">All Faridabad Colleges</option>
+          </select>
+        </div>
+
+        <!-- Gender Filter -->
+        <div class="filter-section">
+          <div class="filter-title">Tenant Preference</div>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; cursor: pointer;">
+              <input type="radio" name="gender-filter" value="all" checked> All Types
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; cursor: pointer;">
+              <input type="radio" name="gender-filter" value="boys"> Boys PG
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; cursor: pointer;">
+              <input type="radio" name="gender-filter" value="girls"> Girls PG
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; cursor: pointer;">
+              <input type="radio" name="gender-filter" value="unisex"> Co-Ed / Unisex
+            </label>
+          </div>
+        </div>
+
+        <!-- Max Budget Filter -->
+        <div class="filter-section">
+          <div class="filter-title" style="display: flex; justify-content: space-between;">
+            <span>Max Budget</span>
+            <span id="budget-value-display" style="color: var(--brand-primary); font-weight: 700;">₹16,000</span>
+          </div>
+          <input type="range" id="filter-budget-range" min="5000" max="20000" step="500" value="16000" style="width: 100%; accent-color: var(--brand-primary);">
+          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.35rem;">
+            <span>₹5,000</span>
+            <span>₹20,000+</span>
+          </div>
+        </div>
+
+        <!-- Amenities Checkboxes -->
+        <div class="filter-section">
+          <div class="filter-title">Essential Amenities</div>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem;">
+            <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+              <input type="checkbox" class="filter-amenity" value="Wi-Fi"> High-speed Wi-Fi
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+              <input type="checkbox" class="filter-amenity" value="3 Times Meals"> 3 Times Homely Meals
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+              <input type="checkbox" class="filter-amenity" value="Air Conditioner (AC)"> AC Installed
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+              <input type="checkbox" class="filter-amenity" value="Power Backup"> 24x7 Power Backup
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+              <input type="checkbox" class="filter-amenity" value="CCTV Security"> CCTV / Biometric Security
+            </label>
+          </div>
+        </div>
+      </aside>
+
+      <!-- RIGHT: LISTINGS RESULTS -->
+      <section>
+        <div class="filter-results-bar">
+          <div>
+            <span id="results-count-text" style="font-weight: 700; color: var(--brand-neutral); font-size: 1.1rem;">
+              Loading verified PGs...
+            </span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.65rem;">
+            <label for="sort-by" style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">Sort By:</label>
+            <select id="sort-by" class="form-control" style="width: auto; padding: 0.4rem 0.75rem; font-size: 0.85rem;">
+              <option value="recommended">Recommended (Verified First)</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="rating">Student Rating</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Cards Grid -->
+        <div id="listings-grid" class="property-grid">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <div>&copy; 2026 RentDirect. Student Accommodation Marketplace.</div>
+        <div>
+          <a href="student-register.html" style="color: #94a3b8; margin-right: 1rem;">Student Sign Up</a>
+          <a href="owner-register.html" style="color: #94a3b8;">PG Owner Listing</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/mock-data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    // State
+    let currentProperties = [];
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 1. Parse URL query params (e.g. from hero search form)
+      const urlParams = new URLSearchParams(window.location.search);
+      const initialCollege = urlParams.get('college');
+      const initialGender = urlParams.get('gender');
+      const initialMaxPrice = urlParams.get('maxPrice');
+
+      if (initialCollege) {
+        const collegeSelect = document.getElementById('filter-college');
+        if (collegeSelect) collegeSelect.value = initialCollege;
+      }
+
+      if (initialGender) {
+        const genderRadio = document.querySelector(`input[name="gender-filter"][value="${initialGender}"]`);
+        if (genderRadio) genderRadio.checked = true;
+      }
+
+      if (initialMaxPrice) {
+        const budgetRange = document.getElementById('filter-budget-range');
+        const budgetDisplay = document.getElementById('budget-value-display');
+        if (budgetRange) {
+          budgetRange.value = initialMaxPrice;
+          if (budgetDisplay) budgetDisplay.textContent = `₹${parseInt(initialMaxPrice).toLocaleString('en-IN')}`;
+        }
+      }
+
+      // 2. Fetch and render properties
+      await loadProperties();
+
+      // 3. Attach filter listeners
+      setupFilterListeners();
+    });
+
+    async function loadProperties() {
+      const grid = document.getElementById('listings-grid');
+      const countEl = document.getElementById('results-count-text');
+
+      try {
+        const properties = await RentDirectAPI.getProperties();
+        currentProperties = properties;
+        applyFiltersAndSort();
+      } catch (err) {
+        console.error('Error fetching properties', err);
+        grid.innerHTML = '<div class="empty-state"><h3>Unable to load properties</h3><p>Please refresh or try again.</p></div>';
+      }
+    }
+
+    function setupFilterListeners() {
+      const searchInput = document.getElementById('filter-search');
+      const collegeSelect = document.getElementById('filter-college');
+      const genderRadios = document.querySelectorAll('input[name="gender-filter"]');
+      const budgetRange = document.getElementById('filter-budget-range');
+      const budgetDisplay = document.getElementById('budget-value-display');
+      const amenityCheckboxes = document.querySelectorAll('.filter-amenity');
+      const sortSelect = document.getElementById('sort-by');
+      const resetBtn = document.getElementById('reset-filters-btn');
+
+      if (searchInput) searchInput.addEventListener('input', applyFiltersAndSort);
+      if (collegeSelect) collegeSelect.addEventListener('change', applyFiltersAndSort);
+
+      genderRadios.forEach(r => r.addEventListener('change', applyFiltersAndSort));
+
+      if (budgetRange) {
+        budgetRange.addEventListener('input', (e) => {
+          if (budgetDisplay) {
+            budgetDisplay.textContent = `₹${parseInt(e.target.value).toLocaleString('en-IN')}`;
+          }
+          applyFiltersAndSort();
+        });
+      }
+
+      amenityCheckboxes.forEach(c => c.addEventListener('change', applyFiltersAndSort));
+      if (sortSelect) sortSelect.addEventListener('change', applyFiltersAndSort);
+
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          if (searchInput) searchInput.value = '';
+          if (collegeSelect) collegeSelect.value = 'all';
+          const defaultGender = document.querySelector('input[name="gender-filter"][value="all"]');
+          if (defaultGender) defaultGender.checked = true;
+          if (budgetRange) {
+            budgetRange.value = 16000;
+            if (budgetDisplay) budgetDisplay.textContent = '₹16,000';
+          }
+          amenityCheckboxes.forEach(c => c.checked = false);
+          applyFiltersAndSort();
+        });
+      }
+    }
+
+    function applyFiltersAndSort() {
+      const searchVal = (document.getElementById('filter-search')?.value || '').toLowerCase().trim();
+      const collegeVal = document.getElementById('filter-college')?.value || 'all';
+      const genderVal = document.querySelector('input[name="gender-filter"]:checked')?.value || 'all';
+      const maxPriceVal = parseInt(document.getElementById('filter-budget-range')?.value || '20000', 10);
+      const selectedAmenities = Array.from(document.querySelectorAll('.filter-amenity:checked')).map(c => c.value);
+      const sortVal = document.getElementById('sort-by')?.value || 'recommended';
+
+      let filtered = currentProperties.filter(item => {
+        // Keyword Search
+        if (searchVal) {
+          const matchTitle = item.title.toLowerCase().includes(searchVal);
+          const matchLoc = item.address.toLowerCase().includes(searchVal);
+          const matchCol = item.collegeName.toLowerCase().includes(searchVal);
+          if (!matchTitle && !matchLoc && !matchCol) return false;
+        }
+
+        // College
+        if (collegeVal !== 'all' && item.collegeId !== collegeVal) {
+          return false;
+        }
+
+        // Gender
+        if (genderVal !== 'all') {
+          if (item.gender !== genderVal && item.gender !== 'unisex') return false;
+        }
+
+        // Price
+        if (item.price > maxPriceVal) {
+          return false;
+        }
+
+        // Amenities
+        if (selectedAmenities.length > 0) {
+          const hasAll = selectedAmenities.every(a => (item.amenities || []).includes(a));
+          if (!hasAll) return false;
+        }
+
+        return true;
+      });
+
+      // Sorting
+      if (sortVal === 'price-low') {
+        filtered.sort((a, b) => a.price - b.price);
+      } else if (sortVal === 'price-high') {
+        filtered.sort((a, b) => b.price - a.price);
+      } else if (sortVal === 'rating') {
+        filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+      } else {
+        // Recommended: verified first, then rating
+        filtered.sort((a, b) => (b.verified ? 1 : 0) - (a.verified ? 1 : 0));
+      }
+
+      // Render
+      renderListings(filtered);
+    }
+
+    function renderListings(items) {
+      const grid = document.getElementById('listings-grid');
+      const countEl = document.getElementById('results-count-text');
+
+      if (!grid) return;
+
+      if (items.length === 0) {
+        countEl.textContent = '0 accommodations found';
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+            <h3 style="font-size: 1.3rem; font-weight: 700; color: var(--brand-neutral); margin-bottom: 0.5rem;">
+              No matching accommodations found
+            </h3>
+            <p style="color: var(--text-secondary); max-width: 400px; margin: 0 auto 1.5rem;">
+              Try widening your budget filter or switching campus selection to see nearby accommodations.
+            </p>
+            <button onclick="document.getElementById('reset-filters-btn').click()" class="btn btn-primary btn-sm">
+              Reset Filters
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      countEl.textContent = `Showing ${items.length} verified accommodation${items.length > 1 ? 's' : ''}`;
+      grid.innerHTML = items.map(p => RentDirectUI.createPropertyCardHTML(p)).join('');
+    }
+  </script>
+</body>
+</html>

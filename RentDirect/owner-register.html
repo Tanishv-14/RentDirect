@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PG Owner Registration & Listing | RentDirect</title>
+  <meta name="description" content="List your student PG step-by-step for free. Connect directly with college students with zero brokerage.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .owner-hero-banner {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(13, 148, 136, 0.95)), #1e293b;
+      color: #fff;
+      padding: 3rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================
+       HEADER & NAVIGATION (Un-congested, Clean)
+       ========================================== -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="brand-logo">
+          <div class="brand-logo-icon">RD</div>
+          Rent<span>Direct</span>
+        </a>
+
+        <!-- Clean, Spacious Navigation Links -->
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="listings.html" class="nav-link">Browse PGs</a></li>
+          <li><a href="index.html#colleges" class="nav-link">Colleges</a></li>
+          <li><a href="student-register.html" class="nav-link">For Students</a></li>
+          <li><a href="owner-register.html" class="nav-link active">For PG Owners</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <a href="#owner-wizard-card" class="btn btn-secondary btn-sm">+ Post Property</a>
+          <button class="mobile-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       OWNER HERO BANNER
+       ========================================== -->
+  <section class="owner-hero-banner">
+    <div class="container">
+      <div style="max-width: 720px;">
+        <span class="active-badge-pill" style="background: rgba(255,255,255,0.2); color: #fff; margin-bottom: 1rem; display: inline-block;">
+          ⚡ 100% Free Listing • Zero Brokerage
+        </span>
+        <h1 style="font-size: 2.3rem; font-weight: 800; line-height: 1.25; margin-bottom: 0.85rem;">
+          Fill Your PG Rooms With Verified Students
+        </h1>
+        <p style="font-size: 1.05rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 1.5rem;">
+          Connect directly with verified students near your campus. No brokers, no commissions, and zero listing fees.
+        </p>
+        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem;">
+            <span>✓</span> Direct WhatsApp & Call Leads
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem;">
+            <span>✓</span> ID-Verified College Tenants
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem;">
+            <span>✓</span> Manage Availability Easily
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       OWNER ONBOARDING & LISTING STEP-BY-STEP WIZARD
+       ========================================== -->
+  <main class="container" style="margin-bottom: 4rem;" id="owner-wizard-card">
+    <div class="auth-container" style="max-width: 780px;">
+      
+      <!-- Header -->
+      <div class="auth-header">
+        <span class="section-tag">Direct Owner Onboarding</span>
+        <h2 id="owner-wizard-heading" style="font-size: 1.85rem; font-weight: 800; color: var(--brand-neutral);">
+          List Your Property Step-by-Step
+        </h2>
+        <p id="owner-wizard-subheading" style="color: var(--text-secondary); font-size: 0.95rem;">
+          Your listing will appear directly to students searching near your campus.
+        </p>
+      </div>
+
+      <!-- Step Progress Bar -->
+      <div class="wizard-progress-bar" id="owner-progress-bar">
+        <div class="wizard-progress-line">
+          <div class="wizard-progress-fill" id="owner-progress-fill" style="width: 10%;"></div>
+        </div>
+
+        <div class="wizard-step-node active" id="owner-node-1">
+          <div class="wizard-node-circle">1</div>
+          <span class="wizard-node-label">Name</span>
+        </div>
+
+        <div class="wizard-step-node" id="owner-node-2">
+          <div class="wizard-node-circle">2</div>
+          <span class="wizard-node-label">Email & OTP</span>
+        </div>
+
+        <div class="wizard-step-node" id="owner-node-3">
+          <div class="wizard-node-circle">3</div>
+          <span class="wizard-node-label">Location</span>
+        </div>
+
+        <div class="wizard-step-node" id="owner-node-4">
+          <div class="wizard-node-circle">4</div>
+          <span class="wizard-node-label">Rent & Rooms</span>
+        </div>
+
+        <div class="wizard-step-node" id="owner-node-5">
+          <div class="wizard-node-circle">5</div>
+          <span class="wizard-node-label">Amenities</span>
+        </div>
+      </div>
+
+      <!-- SUCCESS COMPLETION SCREEN -->
+      <div id="owner-success-card" style="display: none; text-align: center; padding: 2.5rem 1rem;">
+        <div style="font-size: 3.5rem; margin-bottom: 1rem;">⏳</div>
+        <h2 style="font-size: 1.7rem; font-weight: 800; color: var(--brand-neutral); margin-bottom: 0.5rem;">
+          Listing Submitted for Admin Verification!
+        </h2>
+        <div style="display: inline-block; background: #fef3c7; color: #92400e; padding: 0.35rem 0.9rem; border-radius: var(--radius-full); font-weight: 700; font-size: 0.85rem; margin-bottom: 1rem;">
+          Status: ⏳ Under Verification Review
+        </div>
+        <p id="owner-success-desc" style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 1rem; max-width: 520px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+          Your accommodation details have been sent to our backend verification queue. The RentDirect admin team has received a notification to review campus proximity and owner identity.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a id="view-listing-btn" href="listings.html" class="btn btn-primary btn-lg">
+            Preview Your Pending Listing →
+          </a>
+          <button onclick="window.location.reload()" class="btn btn-outline btn-lg">
+            List Another Property
+          </button>
+        </div>
+      </div>
+
+      <!-- WIZARD FORM -->
+      <form id="owner-listing-form">
+
+        <!-- ==========================================
+             STEP 1: OWNER FULL NAME ONLY
+             ========================================== -->
+        <div class="wizard-step active" id="owner-step-1">
+          <div style="margin-bottom: 1.5rem;">
+            <label for="owner-name" style="font-size: 1.1rem; font-weight: 700; color: var(--brand-neutral); display: block; margin-bottom: 0.5rem;">
+              What is your Full Name? *
+            </label>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">
+              Enter the owner or manager name students will see on your accommodation page.
+            </p>
+            <input 
+              type="text" 
+              id="owner-name" 
+              class="form-control" 
+              placeholder="e.g. Ramesh Chawla" 
+              style="font-size: 1.05rem; padding: 0.85rem;" 
+              autofocus 
+              required 
+            />
+            <div id="owner-name-error" style="color: var(--status-danger); font-size: 0.85rem; margin-top: 0.4rem; display: none;">
+              ⚠️ Please enter your name to continue.
+            </div>
+          </div>
+
+          <button type="button" id="btn-owner-to-2" class="btn btn-secondary btn-block btn-lg" style="margin-top: 2rem;">
+            Continue →
+          </button>
+        </div>
+
+        <!-- ==========================================
+             STEP 2: EMAIL & OTP VERIFICATION (Always 123456)
+             ========================================== -->
+        <div class="wizard-step" id="owner-step-2">
+          
+          <!-- Sub-view 2A: Enter Email -->
+          <div id="owner-email-entry-view">
+            <div style="margin-bottom: 1.5rem;">
+              <label for="owner-email" style="font-size: 1.1rem; font-weight: 700; color: var(--brand-neutral); display: block; margin-bottom: 0.5rem;">
+                Your Email Address *
+              </label>
+              <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">
+                We will send an OTP code to verify your owner account.
+              </p>
+              <input 
+                type="email" 
+                id="owner-email" 
+                class="form-control" 
+                placeholder="e.g. ramesh.pg@example.com" 
+                style="font-size: 1.05rem; padding: 0.85rem;" 
+                required 
+              />
+              <div id="owner-email-error" style="color: var(--status-danger); font-size: 0.85rem; margin-top: 0.4rem; display: none;">
+                ⚠️ Please enter a valid email address.
+              </div>
+            </div>
+
+            <div class="wizard-nav-btns">
+              <button type="button" id="btn-owner-back-to-1" class="btn btn-outline">
+                ← Back
+              </button>
+              <button type="button" id="btn-owner-send-otp" class="btn btn-secondary">
+                Send Verification Code →
+              </button>
+            </div>
+          </div>
+
+          <!-- Sub-view 2B: Enter OTP -->
+          <div id="owner-otp-entry-view" style="display: none;">
+            <div class="otp-box-wrapper">
+              <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">📩</div>
+              <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--brand-neutral); margin-bottom: 0.35rem;">
+                Enter 6-Digit Owner OTP
+              </h3>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.6rem;">
+                Verification code sent to <strong id="owner-display-target-email">your email</strong>
+              </p>
+              <div class="otp-hint-badge">
+                ⚡ Test OTP: <strong>123456</strong>
+              </div>
+
+              <div style="margin-top: 1.25rem;">
+                <input 
+                  type="text" 
+                  id="owner-otp" 
+                  class="otp-digit-input" 
+                  placeholder="123456" 
+                  maxlength="6" 
+                  autocomplete="one-time-code"
+                />
+                <div id="owner-otp-error" style="color: var(--status-danger); font-size: 0.85rem; margin-top: 0.5rem; display: none;">
+                  ❌ Incorrect OTP. Please enter <strong>123456</strong> for demo verification.
+                </div>
+                <div id="owner-otp-success" style="color: var(--status-success); font-size: 0.9rem; margin-top: 0.5rem; font-weight: 700; display: none;">
+                  ✓ Owner email verified successfully!
+                </div>
+              </div>
+
+              <button type="button" id="btn-owner-change-email" class="btn btn-ghost btn-sm" style="margin-top: 0.75rem; color: var(--brand-secondary);">
+                ✏️ Change Email Address
+              </button>
+            </div>
+
+            <div class="wizard-nav-btns">
+              <button type="button" id="btn-owner-back-to-email" class="btn btn-outline">
+                ← Back
+              </button>
+              <button type="button" id="btn-owner-verify-otp" class="btn btn-secondary">
+                Verify & Continue →
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ==========================================
+             STEP 3: CONTACT & PROPERTY LOCATION
+             ========================================== -->
+        <div class="wizard-step" id="owner-step-3">
+          <div style="margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--brand-neutral); margin-bottom: 0.35rem;">
+              Contact & Campus Proximity
+            </h3>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem;">
+              Provide direct contact details and the nearest campus for student matching.
+            </p>
+
+            <!-- Direct Phone -->
+            <div class="form-field">
+              <label for="owner-phone">Direct Mobile / WhatsApp Number *</label>
+              <input 
+                type="tel" 
+                id="owner-phone" 
+                class="form-control" 
+                placeholder="e.g. 9810123456" 
+                pattern="[0-9]{10}" 
+                maxlength="10" 
+                required 
+              />
+              <div class="field-hint">Students will contact this number directly via Call & WhatsApp.</div>
+            </div>
+
+            <!-- College Selection (Not showing 'in Faridabad') -->
+            <div class="form-field">
+              <label for="prop-college">Nearest College / University *</label>
+              <select id="prop-college" class="form-control" style="font-size: 1rem; padding: 0.75rem;" required>
+                <option value="">Select Nearest College</option>
+                <option value="mriirs">Manav Rachna (MRIIRS / MRU)</option>
+                <option value="ymca">J.C. Bose UST (YMCA)</option>
+                <option value="lingayas">Lingaya's Vidyapeeth</option>
+                <option value="echelon">Echelon Institute of Technology</option>
+                <option value="alfalah">Al-Falah University</option>
+                <option value="davim">DAV Institute of Management</option>
+                <option value="other">Other College / University</option>
+              </select>
+            </div>
+
+            <!-- Custom College Name Input (if Other selected) -->
+            <div class="form-field" id="custom-owner-college-box" style="display: none;">
+              <label for="prop-custom-college">Type College Name *</label>
+              <input type="text" id="prop-custom-college" class="form-control" placeholder="e.g. Nearby University or Institute" />
+            </div>
+
+            <div class="form-field">
+              <label for="prop-distance">Distance from Campus Gate *</label>
+              <input 
+                type="text" 
+                id="prop-distance" 
+                class="form-control" 
+                placeholder="e.g. 350m from Gate 2 / 5 mins walk" 
+                required 
+              />
+            </div>
+
+            <div class="form-field">
+              <label for="prop-address">Full Property Address *</label>
+              <input 
+                type="text" 
+                id="prop-address" 
+                class="form-control" 
+                placeholder="e.g. Plot 82, Sector 43, Surajkund Road, Faridabad" 
+                required 
+              />
+            </div>
+
+            <div id="owner-step-3-error" style="color: var(--status-danger); font-size: 0.85rem; margin-top: 0.5rem; display: none;">
+              ⚠️ Please fill in all required location details to proceed.
+            </div>
+          </div>
+
+          <div class="wizard-nav-btns">
+            <button type="button" id="btn-owner-back-to-2" class="btn btn-outline">
+              ← Back
+            </button>
+            <button type="button" id="btn-owner-to-4" class="btn btn-secondary">
+              Continue →
+            </button>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             STEP 4: PRICING & ROOM SPECIFICATIONS
+             ========================================== -->
+        <div class="wizard-step" id="owner-step-4">
+          <div style="margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--brand-neutral); margin-bottom: 0.35rem;">
+              Pricing & Room Types
+            </h3>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem;">
+              Set your title, rent, and who can stay at your accommodation.
+            </p>
+
+            <div class="form-field">
+              <label for="prop-title">Listing Title *</label>
+              <input 
+                type="text" 
+                id="prop-title" 
+                class="form-control" 
+                placeholder="e.g. Aravali Heights Student Living" 
+                required 
+              />
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-field">
+                <label for="prop-gender">Allowed Tenant Gender *</label>
+                <select id="prop-gender" class="form-control" required>
+                  <option value="boys">Boys PG Only</option>
+                  <option value="girls">Girls PG Only</option>
+                  <option value="unisex">Co-Ed / Unisex PG</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label for="prop-price">Monthly Rent Starts From (₹) *</label>
+                <input 
+                  type="number" 
+                  id="prop-price" 
+                  class="form-control" 
+                  placeholder="e.g. 7500" 
+                  min="2000" 
+                  max="50000" 
+                  required 
+                />
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label>Available Room Configurations *</label>
+              <div class="checkbox-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="roomType" value="Single Room" checked> Single Room
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="roomType" value="Double Sharing" checked> Double Sharing
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="roomType" value="Triple Sharing"> Triple Sharing
+                </label>
+              </div>
+            </div>
+
+            <div id="owner-step-4-error" style="color: var(--status-danger); font-size: 0.85rem; margin-top: 0.5rem; display: none;">
+              ⚠️ Please enter a listing title and valid starting monthly rent.
+            </div>
+          </div>
+
+          <div class="wizard-nav-btns">
+            <button type="button" id="btn-owner-back-to-3" class="btn btn-outline">
+              ← Back
+            </button>
+            <button type="button" id="btn-owner-to-5" class="btn btn-secondary">
+              Continue →
+            </button>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             STEP 5: AMENITIES, RULES & PHOTOS
+             ========================================== -->
+        <div class="wizard-step" id="owner-step-5">
+          <div style="margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--brand-neutral); margin-bottom: 0.35rem;">
+              Amenities, Rules & Photos
+            </h3>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem;">
+              Showcase the facilities that make your PG comfortable and secure.
+            </p>
+
+            <div class="form-field">
+              <label>Select Included Amenities</label>
+              <div class="checkbox-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="amenity" value="Wi-Fi" checked> High-Speed Wi-Fi
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="amenity" value="3 Times Meals" checked> 3 Times Meals
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="amenity" value="Air Conditioner (AC)" checked> AC Installed
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="amenity" value="Attached Washroom" checked> Attached Washroom
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="amenity" value="Power Backup" checked> 24x7 Power Backup
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="amenity" value="RO Water" checked> RO Water
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="amenity" value="Washing Machine"> Washing Machine
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="amenity" value="CCTV Security"> CCTV Security
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="amenity" value="Study Table"> Study Table
+                </label>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="prop-rules">House Rules & Gate Timings</label>
+              <input 
+                type="text" 
+                id="prop-rules" 
+                class="form-control" 
+                placeholder="e.g. Gate closes at 10:00 PM. Visitors allowed in lounge only." 
+              />
+            </div>
+
+            <div class="form-field">
+              <label for="prop-desc">Property Description</label>
+              <textarea 
+                id="prop-desc" 
+                class="form-control" 
+                rows="3" 
+                placeholder="Describe room furnishings, cleanliness, meal timings, and security..."
+              ></textarea>
+            </div>
+
+            <div class="form-field">
+              <label for="prop-image">Photo URL (Optional)</label>
+              <input 
+                type="url" 
+                id="prop-image" 
+                class="form-control" 
+                placeholder="https://images.unsplash.com/photo-..." 
+              />
+              <div class="field-hint">Leave blank to use an aesthetic default student accommodation photo.</div>
+            </div>
+          </div>
+
+          <div class="wizard-nav-btns">
+            <button type="button" id="btn-owner-back-to-4" class="btn btn-outline">
+              ← Back
+            </button>
+            <button type="submit" id="owner-submit-btn" class="btn btn-secondary btn-lg">
+              Publish Listing on RentDirect 🎉
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </main>
+
+  <!-- ==========================================
+       OWNER BENEFITS & GUIDELINES
+       ========================================== -->
+  <section class="section-wrapper alt-bg" id="guidelines">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Owner Benefits</span>
+        <h2 class="section-title">Why PG Owners Choose RentDirect</h2>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+        <div style="background: #fff; padding: 1.75rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+          <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">🚫 0%</div>
+          <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-neutral); margin-bottom: 0.5rem;">No Middlemen or Brokerage</h4>
+          <p style="font-size: 0.9rem; color: var(--text-secondary);">
+            Local brokers charge 15 to 30 days rent. RentDirect is 100% direct and transparent.
+          </p>
+        </div>
+
+        <div style="background: #fff; padding: 1.75rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+          <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">🎓 ID</div>
+          <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-neutral); margin-bottom: 0.5rem;">Verified Campus Students</h4>
+          <p style="font-size: 0.9rem; color: var(--text-secondary);">
+            Connect with verified college students from local institutions who have student enrollment.
+          </p>
+        </div>
+
+        <div style="background: #fff; padding: 1.75rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+          <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">📱 Direct</div>
+          <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-neutral); margin-bottom: 0.5rem;">Direct Phone & WhatsApp</h4>
+          <p style="font-size: 0.9rem; color: var(--text-secondary);">
+            Receive inquiries directly on your phone, arrange room tours according to your schedule, and close bookings fast.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <div>&copy; 2026 RentDirect Marketplace. Built for Student Hackathon.</div>
+        <div>Configurable 3-Colour Design System • Ready for Flask API</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/mock-data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    // State Tracking
+    let ownerCurrentStep = 1;
+    let isOwnerEmailVerified = false;
+
+    const ownerProgressFill = document.getElementById('owner-progress-fill');
+    const ownerNodes = [
+      document.getElementById('owner-node-1'),
+      document.getElementById('owner-node-2'),
+      document.getElementById('owner-node-3'),
+      document.getElementById('owner-node-4'),
+      document.getElementById('owner-node-5')
+    ];
+
+    function setOwnerStep(step) {
+      ownerCurrentStep = step;
+
+      // Update wizard steps visibility
+      document.querySelectorAll('#owner-listing-form .wizard-step').forEach((el, index) => {
+        el.classList.toggle('active', index + 1 === step);
+      });
+
+      // Update progress bar
+      const percentages = [10, 32, 55, 78, 100];
+      if (ownerProgressFill) ownerProgressFill.style.width = percentages[step - 1] + '%';
+
+      ownerNodes.forEach((node, idx) => {
+        if (!node) return;
+        node.classList.remove('active', 'completed');
+        if (idx + 1 === step) {
+          node.classList.add('active');
+        } else if (idx + 1 < step) {
+          node.classList.add('completed');
+        }
+      });
+
+      window.scrollTo({ top: document.getElementById('owner-wizard-card').offsetTop - 80, behavior: 'smooth' });
+    }
+
+    // Toggle custom college input if 'Other' selected
+    document.getElementById('prop-college').addEventListener('change', (e) => {
+      const customBox = document.getElementById('custom-owner-college-box');
+      if (customBox) {
+        customBox.style.display = (e.target.value === 'other') ? 'block' : 'none';
+      }
+    });
+
+    // STEP 1 -> STEP 2 (Name only)
+    document.getElementById('btn-owner-to-2').addEventListener('click', () => {
+      const nameInput = document.getElementById('owner-name');
+      const nameError = document.getElementById('owner-name-error');
+      const val = (nameInput.value || '').trim();
+
+      if (!val || val.length < 2) {
+        nameError.style.display = 'block';
+        nameInput.focus();
+        return;
+      }
+      nameError.style.display = 'none';
+      setOwnerStep(2);
+    });
+
+    // STEP 2: Send OTP via Centralized API Service
+    document.getElementById('btn-owner-send-otp').addEventListener('click', async () => {
+      const emailInput = document.getElementById('owner-email');
+      const emailError = document.getElementById('owner-email-error');
+      const val = (emailInput.value || '').trim();
+
+      if (!val || !val.includes('@') || !val.includes('.')) {
+        emailError.style.display = 'block';
+        emailInput.focus();
+        return;
+      }
+      emailError.style.display = 'none';
+
+      // Centralized API call
+      await RentDirectAPI.sendOtp(val, 'owner');
+
+      document.getElementById('owner-display-target-email').textContent = val;
+      document.getElementById('owner-email-entry-view').style.display = 'none';
+      document.getElementById('owner-otp-entry-view').style.display = 'block';
+
+      const otpInput = document.getElementById('owner-otp');
+      otpInput.value = '';
+      otpInput.focus();
+    });
+
+    // STEP 2: Change Email
+    document.getElementById('btn-owner-change-email').addEventListener('click', () => {
+      document.getElementById('owner-otp-entry-view').style.display = 'none';
+      document.getElementById('owner-email-entry-view').style.display = 'block';
+      document.getElementById('owner-email').focus();
+    });
+
+    document.getElementById('btn-owner-back-to-email').addEventListener('click', () => {
+      document.getElementById('owner-otp-entry-view').style.display = 'none';
+      document.getElementById('owner-email-entry-view').style.display = 'block';
+    });
+
+    // STEP 2: Verify OTP via Centralized API Service
+    document.getElementById('btn-owner-verify-otp').addEventListener('click', async () => {
+      const email = (document.getElementById('owner-email').value || '').trim();
+      const otpInput = document.getElementById('owner-otp');
+      const otpError = document.getElementById('owner-otp-error');
+      const otpSuccess = document.getElementById('owner-otp-success');
+      const val = (otpInput.value || '').trim();
+
+      // Centralized API call
+      const result = await RentDirectAPI.verifyOtp(email, val);
+
+      if (result.success) {
+        isOwnerEmailVerified = true;
+        otpError.style.display = 'none';
+        otpSuccess.style.display = 'block';
+
+        setTimeout(() => {
+          setOwnerStep(3);
+        }, 600);
+      } else {
+        otpError.style.display = 'block';
+        otpSuccess.style.display = 'none';
+        otpInput.focus();
+      }
+    });
+
+    // Back to Step 1
+    document.getElementById('btn-owner-back-to-1').addEventListener('click', () => {
+      setOwnerStep(1);
+    });
+
+    // STEP 3 -> STEP 4 (Contact & Location)
+    document.getElementById('btn-owner-to-4').addEventListener('click', () => {
+      const phoneInput = document.getElementById('owner-phone');
+      const collegeSelect = document.getElementById('prop-college');
+      const customCollege = document.getElementById('prop-custom-college');
+      const distInput = document.getElementById('prop-distance');
+      const addrInput = document.getElementById('prop-address');
+      const err = document.getElementById('owner-step-3-error');
+
+      const phoneVal = (phoneInput.value || '').trim();
+      if (!phoneVal || phoneVal.length < 10) {
+        err.textContent = '⚠️ Please enter a valid 10-digit mobile number.';
+        err.style.display = 'block';
+        phoneInput.focus();
+        return;
+      }
+
+      if (!collegeSelect.value) {
+        err.textContent = '⚠️ Please select the nearest college/university.';
+        err.style.display = 'block';
+        collegeSelect.focus();
+        return;
+      }
+
+      if (collegeSelect.value === 'other' && !customCollege.value.trim()) {
+        err.textContent = '⚠️ Please enter the college name.';
+        err.style.display = 'block';
+        customCollege.focus();
+        return;
+      }
+
+      if (!distInput.value.trim() || !addrInput.value.trim()) {
+        err.textContent = '⚠️ Please provide distance and full address.';
+        err.style.display = 'block';
+        distInput.focus();
+        return;
+      }
+
+      err.style.display = 'none';
+      setOwnerStep(4);
+    });
+
+    // Back to Step 2
+    document.getElementById('btn-owner-back-to-2').addEventListener('click', () => {
+      setOwnerStep(2);
+    });
+
+    // STEP 4 -> STEP 5 (Rent & Specifications)
+    document.getElementById('btn-owner-to-5').addEventListener('click', () => {
+      const titleInput = document.getElementById('prop-title');
+      const priceInput = document.getElementById('prop-price');
+      const err = document.getElementById('owner-step-4-error');
+
+      if (!titleInput.value.trim()) {
+        err.textContent = '⚠️ Please enter a listing title for your accommodation.';
+        err.style.display = 'block';
+        titleInput.focus();
+        return;
+      }
+
+      const priceVal = parseInt(priceInput.value, 10);
+      if (isNaN(priceVal) || priceVal < 1000) {
+        err.textContent = '⚠️ Please enter a valid starting monthly rent.';
+        err.style.display = 'block';
+        priceInput.focus();
+        return;
+      }
+
+      err.style.display = 'none';
+      setOwnerStep(5);
+    });
+
+    // Back to Step 3
+    document.getElementById('btn-owner-back-to-3').addEventListener('click', () => {
+      setOwnerStep(3);
+    });
+
+    // Back to Step 4
+    document.getElementById('btn-owner-back-to-4').addEventListener('click', () => {
+      setOwnerStep(4);
+    });
+
+    // FINAL SUBMIT (Step 5)
+    document.getElementById('owner-listing-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById('owner-submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Publishing listing...';
+
+      const selectedAmenities = Array.from(document.querySelectorAll('input[name="amenity"]:checked')).map(c => c.value);
+      const selectedRoomTypes = Array.from(document.querySelectorAll('input[name="roomType"]:checked')).map(c => c.value);
+      
+      const collegeSelect = document.getElementById('prop-college');
+      const customCollege = document.getElementById('prop-custom-college')?.value.trim();
+      const collegeName = (collegeSelect.value === 'other' && customCollege)
+        ? customCollege
+        : (collegeSelect.options[collegeSelect.selectedIndex]?.text || 'Nearby College');
+
+      const customImg = document.getElementById('prop-image').value.trim();
+      const images = customImg 
+        ? [customImg, 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80']
+        : [
+            'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80'
+          ];
+
+      const propertyData = {
+        title: document.getElementById('prop-title').value.trim(),
+        collegeId: collegeSelect.value,
+        collegeName: collegeName,
+        distanceToCollege: document.getElementById('prop-distance').value.trim(),
+        address: document.getElementById('prop-address').value.trim(),
+        gender: document.getElementById('prop-gender').value,
+        price: parseInt(document.getElementById('prop-price').value, 10),
+        roomTypes: selectedRoomTypes.length > 0 ? selectedRoomTypes : ['Single', 'Double Sharing'],
+        amenities: selectedAmenities,
+        rules: document.getElementById('prop-rules').value.trim() || 'Gate closes at 10:00 PM. No loud noise after 11 PM.',
+        description: document.getElementById('prop-desc').value.trim() || 'Clean, comfortable student accommodation close to campus.',
+        images: images,
+        owner: {
+          name: document.getElementById('owner-name').value.trim(),
+          phone: document.getElementById('owner-phone').value.trim(),
+          email: document.getElementById('owner-email').value.trim(),
+          verified: true
+        }
+      };
+
+      try {
+        const result = await RentDirectAPI.createProperty(propertyData);
+        RentDirectUI.showToast('Listing published successfully!', 'success');
+
+        // Hide form and progress
+        document.getElementById('owner-listing-form').style.display = 'none';
+        document.getElementById('owner-progress-bar').style.display = 'none';
+        document.getElementById('owner-wizard-heading').textContent = 'Submitted for Verification';
+        document.getElementById('owner-wizard-subheading').textContent = 'Admin notification sent. Property is currently under review.';
+
+        const successCard = document.getElementById('owner-success-card');
+        const viewListingBtn = document.getElementById('view-listing-btn');
+
+        if (result.property?.id) {
+          viewListingBtn.href = `property-details.html?id=${result.property.id}`;
+        }
+        successCard.style.display = 'block';
+        window.scrollTo({ top: document.getElementById('owner-wizard-card').offsetTop - 80, behavior: 'smooth' });
+      } catch (err) {
+        console.error('Failed to create listing', err);
+        RentDirectUI.showToast('Failed to publish listing. Please try again.', 'danger');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Publish Listing on RentDirect 🎉';
+      }
+    });
+  </script>
+</body>
+</html>

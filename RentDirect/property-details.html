@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Property Details | RentDirect</title>
+  <meta name="description" content="View verified student PG details, room photos, monthly rent, and direct owner contact.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      background: var(--bg-surface-alt);
+      padding: 1.25rem;
+      border-radius: var(--radius-md);
+      margin: 1.5rem 0;
+    }
+
+    .spec-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .spec-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    .spec-value {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--brand-neutral);
+      margin-top: 0.2rem;
+    }
+
+    .amenities-full-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 0.85rem;
+      margin-top: 1rem;
+    }
+
+    .amenity-card-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.75rem;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .amenity-card-item span {
+      color: var(--brand-secondary);
+      font-weight: 800;
+    }
+
+    .owner-contact-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .owner-profile-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .owner-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-full);
+      background: var(--brand-primary-light);
+      color: var(--brand-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================
+       HEADER & NAVIGATION
+       ========================================== -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="brand-logo">
+          <div class="brand-logo-icon">RD</div>
+          Rent<span>Direct</span>
+        </a>
+
+        <!-- Clean, Spacious Navigation Links -->
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="listings.html" class="nav-link">Browse PGs</a></li>
+          <li><a href="index.html#colleges" class="nav-link">Colleges</a></li>
+          <li><a href="student-register.html" class="nav-link">For Students</a></li>
+          <li><a href="owner-register.html" class="nav-link">For PG Owners</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <a href="listings.html" class="btn btn-outline btn-sm">← Back to Listings</a>
+          <button class="mobile-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       DETAILS CONTAINER
+       ========================================== -->
+  <main class="container" style="margin-top: 2rem;">
+    <!-- Breadcrumb navigation -->
+    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+      <a href="index.html" style="color: var(--text-muted);">Home</a> / 
+      <a href="listings.html" style="color: var(--text-muted);">Listings</a> / 
+      <span id="breadcrumb-title" style="color: var(--brand-neutral); font-weight: 600;">Loading...</span>
+    </div>
+
+    <!-- Main dynamic layout -->
+    <div id="details-content" class="details-layout">
+      <!-- Populated dynamically via JS -->
+      <div style="text-align: center; padding: 4rem; grid-column: 1 / -1;">
+        <h3>Loading property details...</h3>
+      </div>
+    </div>
+  </main>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <div>&copy; 2026 RentDirect Marketplace. Built for Student Hackathon.</div>
+        <div>Configurable 3-Colour Design System • Ready for Flask API</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/mock-data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const propertyId = urlParams.get('id') || 'rd-mriirs-01'; // Fallback to first item
+
+      try {
+        const item = await RentDirectAPI.getPropertyById(propertyId);
+        renderDetails(item);
+      } catch (err) {
+        console.error('Failed to load property details', err);
+        document.getElementById('details-content').innerHTML = `
+          <div style="text-align: center; padding: 4rem; grid-column: 1 / -1;">
+            <h2>Accommodation not found</h2>
+            <p style="color: var(--text-secondary); margin: 1rem 0;">We could not find the accommodation you requested.</p>
+            <a href="listings.html" class="btn btn-primary">Browse All Listings</a>
+          </div>
+        `;
+      }
+    });
+
+    function renderDetails(item) {
+      document.title = `${item.title} | RentDirect Faridabad`;
+      document.getElementById('breadcrumb-title').textContent = item.title;
+
+      const genderBadge = item.gender.toUpperCase() + ' ACCOMMODATION';
+      const mainImg = item.images && item.images.length > 0 ? item.images[0] : '';
+      const thumb1 = item.images && item.images.length > 1 ? item.images[1] : mainImg;
+      const thumb2 = item.images && item.images.length > 2 ? item.images[2] : mainImg;
+
+      const amenitiesMarkup = (item.amenities || []).map(a => `
+        <div class="amenity-card-item">
+          <span>✓</span> ${a}
+        </div>
+      `).join('');
+
+      const roomTypesText = (item.roomTypes || ['Single', 'Double Sharing']).join(' • ');
+
+      const content = `
+        <!-- LEFT COLUMN: PHOTOS & PROPERTY INFORMATION -->
+        <div>
+          ${!item.verified ? `
+            <div class="alert-banner" style="margin-bottom: 1.5rem; background: #fffbeb; color: #92400e; border: 1px solid #fde68a;">
+              <span style="font-size: 1.25rem;">⏳</span>
+              <div>
+                <strong>Listing Pending Admin Verification:</strong> This property was recently registered by the PG owner and is currently in the backend review queue. The RentDirect admin team verifies campus proximity, photographs, and owner identity before issuing the Verified badge.
+              </div>
+            </div>
+          ` : ''}
+
+          <!-- Title & Badges Header -->
+          <div style="margin-bottom: 1.5rem;">
+            <div style="display: flex; gap: 0.6rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
+              <span class="active-badge-pill" style="background: var(--brand-secondary-light); color: var(--brand-secondary);">
+                🎓 ${item.collegeName}
+              </span>
+              <span class="active-badge-pill" style="background: var(--brand-primary-light); color: var(--brand-primary);">
+                ${genderBadge}
+              </span>
+              ${item.verified 
+                ? '<span class="active-badge-pill" style="background: #d1fae5; color: #065f46;">✓ Verified Property</span>' 
+                : '<span class="active-badge-pill" style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a;">⏳ Pending Verification</span>'}
+            </div>
+
+            <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--brand-neutral); margin-bottom: 0.35rem;">
+              ${item.title}
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; display: flex; align-items: center; gap: 0.4rem;">
+              <span>📍</span> ${item.address} (${item.distanceToCollege || 'Walking distance'})
+            </p>
+          </div>
+
+          <!-- Photo Gallery -->
+          <div class="gallery-grid">
+            <div class="gallery-main">
+              <img src="${mainImg}" alt="${item.title}" />
+            </div>
+            <div class="gallery-side">
+              <div class="gallery-thumb">
+                <img src="${thumb1}" alt="Interior View" />
+              </div>
+              <div class="gallery-thumb">
+                <img src="${thumb2}" alt="Room Facilities" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Specifications Matrix -->
+          <div class="specs-grid">
+            <div class="spec-item">
+              <span class="spec-label">Room Types</span>
+              <span class="spec-value">${roomTypesText}</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Security Deposit</span>
+              <span class="spec-value">₹${(item.securityDeposit || item.price).toLocaleString('en-IN')}</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Notice Period</span>
+              <span class="spec-value">1 Month</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Gate Closing</span>
+              <span class="spec-value">10:00 PM</span>
+            </div>
+          </div>
+
+          <!-- Description Section -->
+          <div class="details-card">
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--brand-neutral); margin-bottom: 0.75rem;">
+              About This Accommodation
+            </h3>
+            <p style="color: var(--text-primary); line-height: 1.7; font-size: 0.95rem;">
+              ${item.description || 'Spacious student accommodation located right near campus gates. Ideal for focused studying and hassle-free living.'}
+            </p>
+          </div>
+
+          <!-- Included Amenities -->
+          <div class="details-card">
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--brand-neutral); margin-bottom: 0.5rem;">
+              Amenities & Facilities Included
+            </h3>
+            <p style="font-size: 0.85rem; color: var(--text-secondary);">
+              All amenities listed below are included in the monthly rent without hidden surcharges.
+            </p>
+            <div class="amenities-full-grid">
+              ${amenitiesMarkup}
+            </div>
+          </div>
+
+          <!-- House Rules & Timings -->
+          <div class="details-card">
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--brand-neutral); margin-bottom: 0.75rem;">
+              House & Campus Rules
+            </h3>
+            <div style="background: var(--bg-surface-alt); padding: 1rem 1.25rem; border-radius: var(--radius-md); font-size: 0.9rem; color: var(--text-secondary);">
+              ${item.rules || 'Gate closes at 10:00 PM. Visitors allowed in lounge only. No smoking or loud music.'}
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: STICKY BOOKING / OWNER CONTACT CARD -->
+        <div>
+          <div class="owner-contact-card sticky-booking-sidebar">
+            <div style="margin-bottom: 1.25rem;">
+              <span style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Monthly Rent</span>
+              <div style="font-size: 1.85rem; font-weight: 800; color: var(--brand-primary); margin-top: 0.2rem;">
+                ₹${item.price.toLocaleString('en-IN')} <span style="font-size: 0.9rem; font-weight: 500; color: var(--text-secondary);">/month</span>
+              </div>
+              <div style="font-size: 0.8rem; color: var(--status-success); font-weight: 600; margin-top: 0.25rem;">
+                ✓ 100% Zero Brokerage Fee (Direct Owner Booking)
+              </div>
+            </div>
+
+            <!-- Owner Profile Header -->
+            <div class="owner-profile-header">
+              <div class="owner-avatar">
+                ${(item.owner?.name || 'Owner').charAt(0)}
+              </div>
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Property Owner</div>
+                <div style="font-size: 1.05rem; font-weight: 700; color: var(--brand-neutral);">${item.owner?.name || 'PG Owner'}</div>
+                ${item.verified 
+                  ? '<div style="font-size: 0.8rem; color: var(--status-success); font-weight: 600;">✓ ID & Campus Verified</div>'
+                  : '<div style="font-size: 0.8rem; color: #d97706; font-weight: 600;">⏳ Verification Review in Progress</div>'}
+              </div>
+            </div>
+
+            <!-- Direct Contact Actions -->
+            <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;">
+              <a href="tel:${item.owner?.phone || '+919810012345'}" class="btn btn-primary btn-block">
+                📞 Call Owner (${item.owner?.phone || '+91 98100 12345'})
+              </a>
+              <a href="https://wa.me/${(item.owner?.phone || '919810012345').replace(/[^0-9]/g, '')}?text=Hi,%20I%20am%20a%20student%20inquiring%20about%20${encodeURIComponent(item.title)}%20via%20RentDirect" target="_blank" class="btn btn-secondary btn-block">
+                💬 WhatsApp Owner Directly
+              </a>
+            </div>
+
+            <!-- Schedule Visit Inquiry Form -->
+            <div style="border-top: 1px solid var(--border-light); padding-top: 1.25rem;">
+              <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-neutral); margin-bottom: 0.75rem;">
+                Request a Room Visit
+              </h4>
+              <form id="visit-inquiry-form" onsubmit="handleInquirySubmit(event, '${item.title}')">
+                <div class="form-field" style="margin-bottom: 0.75rem;">
+                  <label style="font-size: 0.8rem;">Your Full Name</label>
+                  <input type="text" id="inq-name" class="form-control" placeholder="e.g. Rahul Verma" required />
+                </div>
+                <div class="form-field" style="margin-bottom: 0.75rem;">
+                  <label style="font-size: 0.8rem;">Phone Number / WhatsApp</label>
+                  <input type="tel" id="inq-phone" class="form-control" placeholder="e.g. 9812345678" required />
+                </div>
+                <div class="form-field" style="margin-bottom: 0.75rem;">
+                  <label style="font-size: 0.8rem;">Your College</label>
+                  <input type="text" id="inq-college" class="form-control" placeholder="e.g. Manav Rachna MRIIRS" required />
+                </div>
+                <div class="form-field" style="margin-bottom: 1rem;">
+                  <label style="font-size: 0.8rem;">Preferred Move-in Date</label>
+                  <input type="date" id="inq-date" class="form-control" required />
+                </div>
+                <button type="submit" class="btn btn-outline btn-block">
+                  Send Visit Request
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('details-content').innerHTML = content;
+    }
+
+    async function handleInquirySubmit(e, propertyTitle) {
+      e.preventDefault();
+      const name = document.getElementById('inq-name').value.trim();
+      const phone = document.getElementById('inq-phone').value.trim();
+      const college = document.getElementById('inq-college').value.trim();
+      const date = document.getElementById('inq-date').value;
+
+      try {
+        await RentDirectAPI.submitVisitInquiry({
+          propertyTitle,
+          name,
+          phone,
+          college,
+          date
+        });
+        RentDirectUI.showToast(`Inquiry sent to owner for ${propertyTitle}! They will contact you shortly at ${phone}.`, 'success');
+        e.target.reset();
+      } catch (err) {
+        console.error('Failed to submit visit inquiry', err);
+        RentDirectUI.showToast('Failed to submit inquiry. Please try again.', 'danger');
+      }
+    }
+  </script>
+</body>
+</html>
