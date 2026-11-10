@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Property Details | RentDirect</title>
+  <meta name="description" content="View verified student PG details, room photos, monthly rent, and direct owner contact.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      background: var(--bg-surface-alt);
+      padding: 1.25rem;
+      border-radius: var(--radius-md);
+      margin: 1.5rem 0;
+    }
+
+    .spec-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .spec-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    .spec-value {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--brand-neutral);
+      margin-top: 0.2rem;
+    }
+
+    .amenities-full-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 0.85rem;
+      margin-top: 1rem;
+    }
+
+    .amenity-card-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.75rem;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .amenity-card-item span {
+      color: var(--brand-secondary);
+      font-weight: 800;
+    }
+
+    .owner-contact-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .owner-profile-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .owner-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-full);
+      background: var(--brand-primary-light);
+      color: var(--brand-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .cost-badge {
+      display: inline-block;
+      padding: 0.18rem 0.4rem;
+      border-radius: 999px;
+      font-size: 0.62rem;
+      font-weight: 800;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    .cost-badge.confirmed {
+      color: #166534;
+      background: #dcfce7;
+    }
+
+    .cost-badge.owner-stated,
+    .cost-badge.estimated {
+      color: #92400e;
+      background: #fef3c7;
+    }
+
+    .true-cost-breakdown {
+      display: grid;
+      gap: 0.55rem;
+      margin: 0.85rem 0;
+      font-size: 0.85rem;
+    }
+
+    .true-cost-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.65rem;
+      color: var(--text-secondary);
+    }
+
+    .true-cost-row > span:last-child {
+      text-align: right;
+      color: var(--brand-neutral);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .true-cost-total {
+      border-top: 1px solid var(--border-light);
+      padding-top: 0.7rem;
+      margin-top: 0.15rem;
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
+    .true-cost-calculator {
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-surface-alt);
+      padding: 1rem;
+      margin: 1rem 0 1.25rem;
+    }
+
+    .calculator-option {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0;
+      font-size: 0.82rem;
+      color: var(--brand-neutral);
+    }
+
+    .calculator-option label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .calculator-option input {
+      accent-color: var(--brand-primary);
+    }
+
+    .calculator-option small {
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .move-in-total {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      border-top: 1px solid var(--border-light);
+      padding-top: 0.7rem;
+      margin-top: 0.4rem;
+      color: var(--brand-neutral);
+      font-weight: 800;
+    }
+
+    .move-in-checklist {
+      margin-top: 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      background: #fff;
+      box-shadow: var(--shadow-md);
+    }
+
+    .move-in-checklist summary {
+      padding: 1rem 1.25rem;
+      color: var(--brand-neutral);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .move-in-checklist-content {
+      padding: 0 1.25rem 1.25rem;
+    }
+
+    .move-in-checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.6rem;
+      margin: 0.85rem 0 1rem;
+    }
+
+    .move-in-checklist-grid label,
+    .move-in-consent label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.55rem;
+      padding: 0.65rem;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .move-in-checklist input {
+      accent-color: var(--brand-primary);
+      margin-top: 0.15rem;
+    }
+
+    .move-in-consent {
+      display: grid;
+      gap: 0.5rem;
+      margin: 0.75rem 0 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================
+       HEADER & NAVIGATION
+       ========================================== -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="brand-logo">
+          <div class="brand-logo-icon">RD</div>
+          Rent<span>Direct</span>
+        </a>
+
+        <!-- Clean, Spacious Navigation Links -->
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="listings.html" class="nav-link">Browse PGs</a></li>
+          <li><a href="index.html#colleges" class="nav-link">Colleges</a></li>
+          <li><a href="student-register.html" class="nav-link">For Students</a></li>
+          <li><a href="owner-register.html" class="nav-link">For PG Owners</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <a href="listings.html" class="btn btn-outline btn-sm">← Back to Listings</a>
+          <button class="mobile-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       DETAILS CONTAINER
+       ========================================== -->
+  <main class="container" style="margin-top: 2rem;">
+    <!-- Breadcrumb navigation -->
+    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+      <a href="index.html" style="color: var(--text-muted);">Home</a> / 
+      <a href="listings.html" style="color: var(--text-muted);">Listings</a> / 
+      <span id="breadcrumb-title" style="color: var(--brand-neutral); font-weight: 600;">Loading...</span>
+    </div>
+
+    <!-- Main dynamic layout -->
+    <div id="details-content" class="details-layout">
+      <!-- Populated dynamically via JS -->
+      <div style="text-align: center; padding: 4rem; grid-column: 1 / -1;">
+        <h3>Loading property details...</h3>
+      </div>
+    </div>
+  </main>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <div>&copy; 2026 RentDirect Marketplace. Built for Student Hackathon.</div>
+        <div>Configurable 3-Colour Design System • Ready for Flask API</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/mock-data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    let currentPropertyDetails = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const propertyId = urlParams.get('id') || 'rd-mriirs-01'; // Fallback to first item
+
+      try {
+        const item = await RentDirectAPI.getPropertyById(propertyId);
+        currentPropertyDetails = item;
+        renderDetails(item);
+      } catch (err) {
+        console.error('Failed to load property details', err);
+        document.getElementById('details-content').innerHTML = `
+          <div style="text-align: center; padding: 4rem; grid-column: 1 / -1;">
+            <h2>Accommodation not found</h2>
+            <p style="color: var(--text-secondary); margin: 1rem 0;">We could not find the accommodation you requested.</p>
+            <a href="listings.html" class="btn btn-primary">Browse All Listings</a>
+          </div>
+        `;
+      }
+    });
+
+    window.addEventListener('rentdirect:property-review-updated', event => {
+      if (!currentPropertyDetails || currentPropertyDetails.id !== event.detail?.propertyId) return;
+      currentPropertyDetails.reviewStatus = event.detail.reviewStatus;
+      renderDetails(currentPropertyDetails);
+    });
+
+    window.addEventListener('storage', event => {
+      if (event.key !== 'rentdirect_property_review_statuses' || !currentPropertyDetails) return;
+      try {
+        const statuses = JSON.parse(event.newValue || '{}');
+        if (statuses[currentPropertyDetails.id]) {
+          currentPropertyDetails.reviewStatus = statuses[currentPropertyDetails.id];
+          renderDetails(currentPropertyDetails);
+        }
+      } catch (error) {
+        console.warn('Unable to apply property review status update.', error);
+      }
+    });
+
+    function renderDetails(item) {
+      document.title = `${item.title} | RentDirect Faridabad`;
+      document.getElementById('breadcrumb-title').textContent = item.title;
+      const cost = RentDirectUI.getTrueCostBreakdown(item);
+      const fixedChargeBadge = RentDirectUI.isPropertyReviewed(item)
+        ? '<b class="cost-badge confirmed">[CONFIRMED]</b>'
+        : '<b class="cost-badge owner-stated">[OWNER STATED]</b>';
+      const pricing = window.RENTDIRECT_CONFIG.TRUE_COST;
+      const reviewBadge = RentDirectUI.getPropertyReviewBadge(item);
+
+      const genderBadge = item.gender.toUpperCase() + ' ACCOMMODATION';
+      const mainImg = item.images && item.images.length > 0 ? item.images[0] : '';
+      const thumb1 = item.images && item.images.length > 1 ? item.images[1] : mainImg;
+      const thumb2 = item.images && item.images.length > 2 ? item.images[2] : mainImg;
+
+      const amenitiesMarkup = (item.amenities || []).map(a => `
+        <div class="amenity-card-item">
+          <span>✓</span> ${a}
+        </div>
+      `).join('');
+
+      const roomTypesText = (item.roomTypes || ['Single', 'Double Sharing']).join(' • ');
+
+      const content = `
+        <!-- LEFT COLUMN: PHOTOS & PROPERTY INFORMATION -->
+        <div>
+          ${!item.verified ? (
+            item.verificationStatus === 'inspection_scheduled' ? `
+              <div class="alert-banner" style="margin-bottom: 1.5rem; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;">
+                <span style="font-size: 1.25rem;">📅</span>
+                <div>
+                  <strong>Campus Inspection Window Dispatched:</strong> The RentDirect backend team has assigned an on-site physical inspection between <strong>${item.inspectionWindow?.startDate || 'Upcoming Date'}</strong> and <strong>${item.inspectionWindow?.endDate || 'Upcoming Date'}</strong> to verify claimed amenities (Wi-Fi, 3 meals, AC backup) before granting the Verified Badge.
+                </div>
+              </div>
+            ` : `
+              <div class="alert-banner" style="margin-bottom: 1.5rem; background: #fffbeb; color: #92400e; border: 1px solid #fde68a;">
+                <span style="font-size: 1.25rem;">⏳</span>
+                <div>
+                  <strong>Listing Pending Backend Inspection:</strong> This property was recently registered by the PG owner and is in the backend queue. The RentDirect verification team will assign a date range to physically inspect facilities before issuing the Verified badge.
+                </div>
+              </div>
+            `
+          ) : ''}
+
+          <!-- Title & Badges Header -->
+          <div style="margin-bottom: 1.5rem;">
+            <div style="display: flex; gap: 0.6rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
+              <span class="active-badge-pill" style="background: var(--brand-secondary-light); color: var(--brand-secondary);">
+                🎓 ${item.collegeName}
+              </span>
+              <span class="active-badge-pill" style="background: var(--brand-primary-light); color: var(--brand-primary);">
+                ${genderBadge}
+              </span>
+              <span class="active-badge-pill" data-property-review-badge style="background: ${reviewBadge.className === 'reviewed' ? '#d1fae5' : reviewBadge.className === 'unverified' ? '#fee2e2' : '#fef3c7'}; color: ${reviewBadge.className === 'reviewed' ? '#065f46' : reviewBadge.className === 'unverified' ? '#991b1b' : '#92400e'};">
+                ${reviewBadge.label}
+              </span>
+            </div>
+
+            <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--brand-neutral); margin-bottom: 0.35rem;">
+              ${item.title}
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; display: flex; align-items: center; gap: 0.4rem;">
+              <span>📍</span> ${item.address} (${item.distanceToCollege || 'Walking distance'})
+            </p>
+          </div>
+
+          <!-- Photo Gallery -->
+          <div class="gallery-grid">
+            <div class="gallery-main">
+              <img src="${mainImg}" alt="${item.title}" />
+            </div>
+            <div class="gallery-side">
+              <div class="gallery-thumb">
+                <img src="${thumb1}" alt="Interior View" />
+              </div>
+              <div class="gallery-thumb">
+                <img src="${thumb2}" alt="Room Facilities" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Specifications Matrix -->
+          <div class="specs-grid">
+            <div class="spec-item">
+              <span class="spec-label">Room Types</span>
+              <span class="spec-value">${roomTypesText}</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Security Deposit</span>
+              <span class="spec-value">₹${(item.securityDeposit || item.price).toLocaleString('en-IN')}</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Notice Period</span>
+              <span class="spec-value">1 Month</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Gate Closing</span>
+              <span class="spec-value">10:00 PM</span>
+            </div>
+          </div>
+
+          <!-- Description Section -->
+          <div class="details-card">
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--brand-neutral); margin-bottom: 0.75rem;">
+              About This Accommodation
+            </h3>
+            <p style="color: var(--text-primary); line-height: 1.7; font-size: 0.95rem;">
+              ${item.description || 'Spacious student accommodation located right near campus gates. Ideal for focused studying and hassle-free living.'}
+            </p>
+          </div>
+
+          <!-- Included Amenities -->
+          <div class="details-card">
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--brand-neutral); margin-bottom: 0.5rem;">
+              Amenities & Facilities Included
+            </h3>
+            <p style="font-size: 0.85rem; color: var(--text-secondary);">
+              Review the True-Cost View for fixed charges and estimated utilities; no brokerage is added.
+            </p>
+            <div class="amenities-full-grid">
+              ${amenitiesMarkup}
+            </div>
+          </div>
+
+          <!-- House Rules & Timings -->
+          <div class="details-card">
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--brand-neutral); margin-bottom: 0.75rem;">
+              House & Campus Rules
+            </h3>
+            <div style="background: var(--bg-surface-alt); padding: 1rem 1.25rem; border-radius: var(--radius-md); font-size: 0.9rem; color: var(--text-secondary);">
+              ${item.rules || 'Gate closes at 10:00 PM. Visitors allowed in lounge only. No smoking or loud music.'}
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: STICKY BOOKING / OWNER CONTACT CARD -->
+        <div>
+          <div class="owner-contact-card sticky-booking-sidebar">
+            <div style="margin-bottom: 1rem;">
+              <span style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">RentDirect True-Cost View</span>
+              <div class="true-cost-breakdown">
+                <div class="true-cost-row"><span>Base Rent ${fixedChargeBadge}</span><span>₹${cost.baseRent.toLocaleString('en-IN')} /mo</span></div>
+                <div class="true-cost-row"><span>Mess ${fixedChargeBadge}</span><span>₹${cost.messCharge.toLocaleString('en-IN')} /mo</span></div>
+                <div class="true-cost-row"><span>Maintenance ${fixedChargeBadge}</span><span>₹${cost.maintenanceCharge.toLocaleString('en-IN')} /mo</span></div>
+                <div class="true-cost-row"><span>Electricity / Utilities <b class="cost-badge estimated">[ESTIMATED]</b></span><span id="true-cost-utilities">₹${cost.utilities.toLocaleString('en-IN')} /mo</span></div>
+                <div class="true-cost-row"><span>Campus commute <b class="cost-badge estimated">[ESTIMATED]</b></span><span id="true-cost-commute">₹${cost.commute.toLocaleString('en-IN')} /mo</span></div>
+                <div class="true-cost-row true-cost-total"><span>Estimated monthly total</span><span id="true-cost-monthly-total" aria-live="polite">₹${cost.monthlyTotal.toLocaleString('en-IN')} /mo</span></div>
+              </div>
+              <div style="font-size: 0.8rem; color: var(--status-success); font-weight: 600; margin-top: 0.25rem;">
+                ✓ 100% Zero Brokerage Fee (Direct Owner Booking)
+              </div>
+            </div>
+
+            <section class="true-cost-calculator" aria-label="True-Cost Calculator">
+              <h4 style="font-size: 0.95rem; font-weight: 800; color: var(--brand-neutral); margin-bottom: 0.2rem;">True-Cost Calculator</h4>
+              <p style="font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 0.55rem;">Select expected usage; appliance and commute figures are planning estimates.</p>
+              <div class="calculator-option">
+                <label><input type="checkbox" data-cost-appliance="ac"> Use room AC</label>
+                <small>+₹${pricing.applianceMonthly.ac.toLocaleString('en-IN')}/mo est.</small>
+              </div>
+              <div class="calculator-option">
+                <label><input type="checkbox" data-cost-appliance="geyser"> Use geyser</label>
+                <small>+₹${pricing.applianceMonthly.geyser.toLocaleString('en-IN')}/mo est.</small>
+              </div>
+              <div class="calculator-option">
+                <label><input type="checkbox" data-cost-appliance="cooler"> Use cooler</label>
+                <small>+₹${pricing.applianceMonthly.cooler.toLocaleString('en-IN')}/mo est.</small>
+              </div>
+              <div style="border-top: 1px solid var(--border-light); margin-top: 0.4rem; padding-top: 0.5rem;">
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--brand-neutral); margin-bottom: 0.2rem;">Daily campus commute</div>
+                <div class="calculator-option">
+                  <label><input type="radio" name="commute-mode" value="walk" checked> Walk</label>
+                  <small>₹0/mo est.</small>
+                </div>
+                <div class="calculator-option">
+                  <label><input type="radio" name="commute-mode" value="autoMetro"> Auto / Metro</label>
+                  <small>₹${pricing.commuteMonthly.autoMetro.toLocaleString('en-IN')}/mo est.</small>
+                </div>
+              </div>
+                <div class="true-cost-breakdown" style="gap: 0.35rem; margin-bottom: 0;">
+                  <div class="true-cost-row"><span>First month rent</span><span>₹${cost.baseRent.toLocaleString('en-IN')}</span></div>
+                  <div class="true-cost-row"><span>Security deposit</span><span>₹${cost.deposit.toLocaleString('en-IN')}</span></div>
+                  <div class="true-cost-row"><span>Brokerage</span><span>₹0</span></div>
+                </div>
+                <div class="move-in-total">
+                  <span>Upfront move-in cash</span>
+                  <span>₹${(cost.baseRent + cost.deposit).toLocaleString('en-IN')}</span>
+                </div>
+            </section>
+
+            <!-- Owner Profile Header -->
+            <div class="owner-profile-header">
+              <div class="owner-avatar">
+                ${(item.owner?.name || 'Owner').charAt(0)}
+              </div>
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Property Owner</div>
+                <div style="font-size: 1.05rem; font-weight: 700; color: var(--brand-neutral);">${item.owner?.name || 'PG Owner'}</div>
+                ${RentDirectUI.isPropertyReviewed(item)
+                  ? '<div style="font-size: 0.8rem; color: var(--status-success); font-weight: 600;">✓ ID & Campus Verified</div>'
+                  : `<div style="font-size: 0.8rem; color: #d97706; font-weight: 600;" data-owner-review-badge>${reviewBadge.label === '⚠ Unverified' ? '⚠ Unverified' : '⏳ Pending Review'}</div>`}
+              </div>
+            </div>
+
+            <button type="button" id="request-true-cost-inquiry" class="btn btn-primary btn-block" style="margin-bottom: 0.75rem;">
+              📅 Request Visit / Lock True-Cost Inquiry
+            </button>
+
+            <!-- Direct Contact Actions -->
+            <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;">
+              <a id="call-owner-link" href="tel:${item.owner?.phone || '+919810012345'}" class="btn btn-primary btn-block">
+                📞 Call Owner (${item.owner?.phone || '+91 98100 12345'})
+              </a>
+              <a id="whatsapp-owner-link" href="https://wa.me/${(item.owner?.phone || '919810012345').replace(/[^0-9]/g, '')}?text=Hi,%20I%20am%20a%20student%20inquiring%20about%20${encodeURIComponent(item.title)}%20via%20RentDirect" class="btn btn-secondary btn-block" target="_blank" rel="noopener">
+                💬 WhatsApp Owner Directly
+              </a>
+            </div>
+
+            <!-- Schedule Visit Inquiry Form -->
+            <div style="border-top: 1px solid var(--border-light); padding-top: 1.25rem;">
+              <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-neutral); margin-bottom: 0.75rem;">
+                Request a Room Visit
+              </h4>
+              <form id="visit-inquiry-form">
+                <div class="form-field" style="margin-bottom: 0.75rem;">
+                  <label for="inq-name" style="font-size: 0.8rem;">Your Full Name</label>
+                  <input type="text" id="inq-name" class="form-control" placeholder="e.g. Rahul Verma" required />
+                </div>
+                <div class="form-field" style="margin-bottom: 0.75rem;">
+                  <label for="inq-email" style="font-size: 0.8rem;">Your Email Address</label>
+                  <input type="email" id="inq-email" class="form-control" placeholder="you@college.edu" required />
+                </div>
+                <div class="form-field" style="margin-bottom: 0.75rem;">
+                  <label for="inq-phone" style="font-size: 0.8rem;">Phone Number / WhatsApp</label>
+                  <input type="tel" id="inq-phone" class="form-control" placeholder="e.g. 9812345678" />
+                </div>
+                <div class="form-field" style="margin-bottom: 0.75rem;">
+                  <label for="inq-college" style="font-size: 0.8rem;">Your College</label>
+                  <input type="text" id="inq-college" class="form-control" value="${item.collegeName}" />
+                </div>
+                <div class="form-field" style="margin-bottom: 1rem;">
+                  <label for="inq-date" style="font-size: 0.8rem;">Preferred Move-in Date</label>
+                  <input type="date" id="inq-date" class="form-control" />
+                </div>
+                <button type="submit" class="btn btn-outline btn-block">
+                  Send Visit Request
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <details class="move-in-checklist" id="move-in-checklist">
+            <summary>📋 Digital Move-In Checklist &amp; Condition Report</summary>
+            <div class="move-in-checklist-content">
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                Complete this checklist together before move-in. Both parties must consent before generating the report.
+              </p>
+              <div class="move-in-checklist-grid">
+                <label><input type="checkbox" data-condition-item="Walls"> Walls condition checked</label>
+                <label><input type="checkbox" data-condition-item="Furniture"> Furniture condition checked</label>
+                <label><input type="checkbox" data-condition-item="AC / Geyser"> AC / Geyser condition checked</label>
+                <label><input type="checkbox" data-condition-item="Meter Reading"> Electricity meter reading recorded</label>
+              </div>
+              <div class="move-in-consent">
+                <label><input type="checkbox" id="student-consent"> Student confirms this report and move-in condition.</label>
+                <label><input type="checkbox" id="owner-consent"> Owner confirms this report and move-in condition.</label>
+                <label><input type="checkbox" id="under18-consent-required"> Student is under 18; parental consent is applicable.</label>
+                <label><input type="checkbox" id="parental-consent"> Parent / guardian consent obtained (required if under 18 is selected).</label>
+              </div>
+              <button type="button" id="download-move-in-report" class="btn btn-secondary btn-block">
+                Download Official Move-In Report (PDF / Print)
+              </button>
+              <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.55rem;">
+                Creates a print-ready report. Use your browser's print dialog to print or save as PDF.
+              </p>
+            </div>
+          </details>
+        </div>
+      `;
+
+      document.getElementById('details-content').innerHTML = content;
+      const currentUser = RentDirectAPI.getCurrentUser();
+      document.getElementById('inq-name').value = currentUser?.name || '';
+      document.getElementById('inq-email').value = currentUser?.email || '';
+      document.getElementById('inq-phone').value = currentUser?.phone || '';
+      document.querySelectorAll('[data-cost-appliance], input[name="commute-mode"]').forEach(input => {
+        input.addEventListener('change', () => updateTrueCostCalculator(item));
+      });
+      document.getElementById('visit-inquiry-form').addEventListener('submit', event => {
+        handleInquirySubmit(event, item);
+      });
+      document.getElementById('request-true-cost-inquiry').addEventListener('click', () => {
+        submitTrueCostInquiry(item, 'true_cost_visit');
+      });
+      document.getElementById('call-owner-link').addEventListener('click', event => {
+        handleContactInquiry(event, item, 'call_owner');
+      });
+      document.getElementById('whatsapp-owner-link').addEventListener('click', event => {
+        handleContactInquiry(event, item, 'whatsapp_owner');
+      });
+      document.getElementById('download-move-in-report').addEventListener('click', () => {
+        printMoveInReport(item);
+      });
+    }
+
+    function updateTrueCostCalculator(property) {
+      const appliances = Object.fromEntries(
+        Array.from(document.querySelectorAll('[data-cost-appliance]')).map(input => [
+          input.dataset.costAppliance,
+          input.checked
+        ])
+      );
+      const commuteMode = document.querySelector('input[name="commute-mode"]:checked')?.value || 'walk';
+      const cost = RentDirectUI.getTrueCostBreakdown(property, { appliances, commuteMode });
+      document.getElementById('true-cost-utilities').textContent = `₹${cost.utilities.toLocaleString('en-IN')} /mo`;
+      document.getElementById('true-cost-commute').textContent = `₹${cost.commute.toLocaleString('en-IN')} /mo`;
+      document.getElementById('true-cost-monthly-total').textContent = `₹${cost.monthlyTotal.toLocaleString('en-IN')} /mo`;
+      return { appliances, commuteMode, cost };
+    }
+
+    async function handleInquirySubmit(e, property) {
+      e.preventDefault();
+      const submitButton = e.currentTarget.querySelector('[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.textContent = 'Sending...';
+
+      try {
+        const inquiry = await saveTrueCostInquiry(property, 'visit');
+        RentDirectUI.showToast(`Inquiry sent to ${property.title} for ${inquiry.name} (${inquiry.studentEmail}).`, 'success');
+        e.target.reset();
+        const currentUser = RentDirectAPI.getCurrentUser();
+        document.getElementById('inq-name').value = currentUser?.name || '';
+        document.getElementById('inq-email').value = currentUser?.email || '';
+        document.getElementById('inq-phone').value = currentUser?.phone || '';
+      } catch (err) {
+        if (err.message !== 'Student name and email are required.') {
+          console.error('Failed to submit visit inquiry', err);
+          RentDirectUI.showToast('Failed to submit inquiry. Please try again.', 'danger');
+        }
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Send Visit Request';
+      }
+    }
+
+    function collectInquiryDetails(property, inquiryType) {
+      const currentUser = RentDirectAPI.getCurrentUser();
+      const name = document.getElementById('inq-name').value.trim() || currentUser?.name || '';
+      const studentEmail = document.getElementById('inq-email').value.trim() || currentUser?.email || '';
+      if (!name || !studentEmail) {
+        RentDirectUI.showToast('Enter your name and email so the owner can respond to your inquiry.', 'danger');
+        const missingInput = !name ? document.getElementById('inq-name') : document.getElementById('inq-email');
+        missingInput.focus();
+        missingInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return null;
+      }
+
+      const { appliances, commuteMode, cost } = updateTrueCostCalculator(property);
+      return {
+        propertyId: property.id,
+        propertyTitle: property.title,
+        ownerEmail: property.owner?.email || '',
+        ownerName: property.owner?.name || 'PG Owner',
+        studentEmail,
+        name,
+        phone: document.getElementById('inq-phone').value.trim() || currentUser?.phone || '',
+        college: document.getElementById('inq-college').value.trim() || property.collegeName || '',
+        date: document.getElementById('inq-date').value || '',
+        selectedAppliances: appliances,
+        commuteMode,
+        monthlyTotal: cost.monthlyTotal,
+        inquiryType
+      };
+    }
+
+    async function saveTrueCostInquiry(property, inquiryType) {
+      const inquiry = collectInquiryDetails(property, inquiryType);
+      if (!inquiry) throw new Error('Student name and email are required.');
+      await RentDirectAPI.submitVisitInquiry(inquiry);
+      return inquiry;
+    }
+
+    async function submitTrueCostInquiry(property, inquiryType) {
+      const button = document.getElementById('request-true-cost-inquiry');
+      button.disabled = true;
+      try {
+        const inquiry = await saveTrueCostInquiry(property, inquiryType);
+        if (inquiry) RentDirectUI.showToast('True-Cost inquiry saved. The owner can now respond to your visit request.', 'success');
+      } catch (error) {
+        console.error('Unable to save True-Cost inquiry', error);
+        if (error.message !== 'Student name and email are required.') {
+          RentDirectUI.showToast('Unable to save inquiry. Please try again.', 'danger');
+        }
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    async function handleContactInquiry(event, property, inquiryType) {
+      event.preventDefault();
+      const link = event.currentTarget;
+      const inquiry = collectInquiryDetails(property, inquiryType);
+      if (!inquiry) return;
+
+      const targetWindow = inquiryType === 'whatsapp_owner'
+        ? window.open('', '_blank')
+        : null;
+      try {
+        await RentDirectAPI.submitVisitInquiry(inquiry);
+        RentDirectUI.showToast('Your inquiry has been saved for the owner.', 'success');
+      } catch (error) {
+        console.error('Unable to log contact inquiry', error);
+        RentDirectUI.showToast('Inquiry could not be saved; opening owner contact anyway.', 'danger');
+      }
+
+      if (inquiryType === 'call_owner') {
+        window.location.href = link.href;
+      } else if (targetWindow) {
+        targetWindow.location.href = link.href;
+      } else {
+        window.location.href = link.href;
+      }
+    }
+
+    function printMoveInReport(property) {
+      const studentName = document.getElementById('inq-name').value.trim();
+      const studentEmail = document.getElementById('inq-email').value.trim();
+      const studentConsent = document.getElementById('student-consent').checked;
+      const ownerConsent = document.getElementById('owner-consent').checked;
+      const under18 = document.getElementById('under18-consent-required').checked;
+      const parentalConsent = document.getElementById('parental-consent').checked;
+
+      if (!studentConsent || !ownerConsent) {
+        RentDirectUI.showToast('Student and Owner consent are both required before generating the report.', 'danger');
+        return;
+      }
+      if (under18 && !parentalConsent) {
+        RentDirectUI.showToast('Parental consent is required when the student is under 18.', 'danger');
+        return;
+      }
+
+      const { appliances, commuteMode, cost } = updateTrueCostCalculator(property);
+      const checkedItems = Array.from(document.querySelectorAll('[data-condition-item]:checked'))
+        .map(input => input.dataset.conditionItem);
+      const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      })[char]);
+      const formatMoney = value => `₹${Number(value).toLocaleString('en-IN')}`;
+      const reportWindow = window.open('', '_blank');
+      if (!reportWindow) {
+        RentDirectUI.showToast('Allow pop-ups to open the print-ready move-in report.', 'danger');
+        return;
+      }
+
+      const conditions = ['Walls', 'Furniture', 'AC / Geyser', 'Meter Reading']
+        .map(label => `<li>${checkedItems.includes(label) ? '☑' : '☐'} ${escapeHtml(label)}</li>`)
+        .join('');
+      const selectedAppliances = Object.entries(appliances)
+        .filter(([, enabled]) => enabled)
+        .map(([name]) => name.toUpperCase())
+        .join(', ') || 'None selected';
+
+      reportWindow.document.open();
+      reportWindow.document.write(`<!doctype html>
+        <html lang="en"><head><meta charset="utf-8"><title>RentDirect Move-In Report - ${escapeHtml(property.title)}</title>
+        <style>
+          body{font:14px Arial,sans-serif;color:#1e293b;max-width:800px;margin:36px auto;padding:0 24px}
+          h1{font-size:24px;margin-bottom:4px}h2{font-size:17px;margin:24px 0 8px;border-bottom:1px solid #cbd5e1;padding-bottom:6px}
+          .muted{color:#64748b;font-size:12px}.summary{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+          .summary div,.panel{padding:10px;border:1px solid #cbd5e1;border-radius:6px}
+          .cost{width:100%;border-collapse:collapse}.cost td{padding:7px;border-bottom:1px solid #e2e8f0}
+          .cost td:last-child{text-align:right;font-weight:700}.total{font-weight:800;font-size:16px}
+          @media print{body{margin:0 auto;padding:0 10mm}.no-print{display:none}}
+        </style></head><body>
+        <h1>RentDirect Digital Move-In Condition Report</h1>
+        <div class="muted">Generated ${escapeHtml(new Date().toLocaleString())} · Review is a check, not a guarantee.</div>
+        <h2>Property & Parties</h2>
+        <div class="summary">
+          <div><b>Property</b><br>${escapeHtml(property.title)}<br>${escapeHtml(property.address)}</div>
+          <div><b>Owner</b><br>${escapeHtml(property.owner?.name || 'PG Owner')}<br>${escapeHtml(property.owner?.email || '')}</div>
+          <div><b>Student</b><br>${escapeHtml(studentName || 'Not provided')}<br>${escapeHtml(studentEmail || 'Not provided')}</div>
+          <div><b>Move-in checklist</b><br>${checkedItems.length} of 4 condition items checked</div>
+        </div>
+        <h2>True-Cost Estimate</h2>
+        <table class="cost">
+          <tr><td>Base Rent</td><td>${formatMoney(cost.baseRent)} / month</td></tr>
+          <tr><td>Mess</td><td>${formatMoney(cost.messCharge)} / month</td></tr>
+          <tr><td>Maintenance</td><td>${formatMoney(cost.maintenanceCharge)} / month</td></tr>
+          <tr><td>Estimated Electricity / Utilities</td><td>${formatMoney(cost.utilities)} / month</td></tr>
+          <tr><td>Estimated Campus Commute (${escapeHtml(commuteMode)})</td><td>${formatMoney(cost.commute)} / month</td></tr>
+          <tr class="total"><td>Estimated monthly total</td><td>${formatMoney(cost.monthlyTotal)}</td></tr>
+          <tr><td>First month rent</td><td>${formatMoney(cost.baseRent)}</td></tr>
+          <tr><td>Security deposit</td><td>${formatMoney(cost.deposit)}</td></tr>
+          <tr><td>Brokerage</td><td>${formatMoney(0)}</td></tr>
+          <tr class="total"><td>Upfront move-in cash</td><td>${formatMoney(cost.baseRent + cost.deposit)}</td></tr>
+        </table>
+        <div class="muted">Selected appliances: ${escapeHtml(selectedAppliances)}. Utilities and commute are estimates; actual costs may vary.</div>
+        <h2>Room Condition Checklist</h2><ul>${conditions}</ul>
+        <h2>Mutual Consent</h2>
+        <div class="panel">Student consent: ${studentConsent ? 'Confirmed' : 'Not confirmed'}<br>
+        Owner consent: ${ownerConsent ? 'Confirmed' : 'Not confirmed'}<br>
+        Under-18 parental consent applicable: ${under18 ? 'Yes' : 'No'}<br>
+        Parent / guardian consent: ${parentalConsent ? 'Confirmed' : 'Not applicable / not confirmed'}</div>
+        <p class="muted">This report records the checklist and estimates selected by the parties. It is not a legal guarantee or a substitute for an independent inspection.</p>
+        <button class="no-print" onclick="window.print()">Print / Save as PDF</button>
+        </body></html>`);
+      reportWindow.document.close();
+      window.setTimeout(() => reportWindow.print(), 250);
+    }
+  </script>
+</body>
+</html>

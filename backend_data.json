@@ -1,0 +1,211 @@
+{
+  "users": [
+    {
+      "id": "usr-admin-01",
+      "email": "admin@rentdirect.com",
+      "password": "admin123",
+      "role": "backend_team",
+      "name": "RentDirect Verification Team",
+      "phone": "+91 98000 00001"
+    },
+    {
+      "id": "usr-owner-01",
+      "email": "ramesh@rentdirect.com",
+      "password": "owner123",
+      "role": "owner",
+      "name": "Ramesh Chawla",
+      "phone": "+91 98101 23456"
+    },
+    {
+      "id": "usr-student-01",
+      "email": "ananya@rentdirect.com",
+      "password": "student123",
+      "role": "student",
+      "name": "Ananya Sharma",
+      "phone": "+91 98112 23344"
+    }
+  ],
+  "properties": [
+    {
+      "id": "rd-mriirs-01",
+      "title": "Aravali Heights Student Living",
+      "collegeId": "mriirs",
+      "collegeName": "Manav Rachna (MRIIRS / MRU)",
+      "distanceToCollege": "350m from MRIIRS Gate 2",
+      "gender": "boys",
+      "roomTypes": [
+        "Single",
+        "Double Sharing",
+        "Triple Sharing"
+      ],
+      "price": 7500,
+      "priceMax": 13000,
+      "securityDeposit": 7500,
+      "reviewStatus": "reviewed",
+      "price_flag": false,
+      "duplicate_flag": false,
+      "duplicate_matches": [],
+      "address": "Plot 82, Sector 43, Surajkund Road, Faridabad",
+      "images": [
+        "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80"
+      ],
+      "amenities": [
+        "Wi-Fi",
+        "3 Times Meals",
+        "Air Conditioner (AC)",
+        "Attached Washroom",
+        "Power Backup",
+        "RO Water",
+        "Study Table",
+        "CCTV Security"
+      ],
+      "verified": true,
+      "verificationStatus": "verified",
+      "rating": 4.8,
+      "reviewsCount": 34,
+      "owner": {
+        "name": "Ramesh Chawla",
+        "phone": "+91 98101 23456",
+        "email": "ramesh@rentdirect.com",
+        "verified": true
+      },
+      "description": "Premier student residency specifically tailored for Manav Rachna students. Located just 4 minutes on foot from campus gate.",
+      "rules": "Gate closes at 10:00 PM. Visitors allowed in common reception room only. No smoking on premises."
+    },
+    {
+      "id": "rd-mriirs-02",
+      "title": "Saraswati Girls Executive PG",
+      "collegeId": "mriirs",
+      "collegeName": "Manav Rachna (MRIIRS / MRU)",
+      "distanceToCollege": "500m from Manav Rachna Campus",
+      "gender": "girls",
+      "roomTypes": [
+        "Single",
+        "Double Sharing"
+      ],
+      "price": 8500,
+      "priceMax": 14500,
+      "securityDeposit": 8500,
+      "reviewStatus": "reviewed",
+      "price_flag": false,
+      "duplicate_flag": false,
+      "duplicate_matches": [],
+      "address": "H.No 120, Charmwood Village / Sector 43 Link, Faridabad",
+      "images": [
+        "https://images.unsplash.com/photo-1540518614846-7ede433c4ef0?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80"
+      ],
+      "amenities": [
+        "Wi-Fi",
+        "3 Times Meals",
+        "Air Conditioner (AC)",
+        "Attached Washroom",
+        "Biometric Entry",
+        "CCTV Security",
+        "Power Backup",
+        "Washing Machine"
+      ],
+      "verified": true,
+      "verificationStatus": "verified",
+      "rating": 4.9,
+      "reviewsCount": 42,
+      "owner": {
+        "name": "Sunita Mehra",
+        "phone": "+91 98188 76543",
+        "email": "sunita.girls@example.com",
+        "verified": true
+      },
+      "description": "Safe, premium girls student accommodation with 24/7 female warden presence and biometric access near MRIIRS.",
+      "rules": "Entry timing 9:30 PM. Prior leave intimation required for outstation travel."
+    },
+    {
+      "id": "rd-ymca-01",
+      "title": "Metro View Co-Living Hub",
+      "collegeId": "ymca",
+      "collegeName": "J.C. Bose UST (YMCA)",
+      "distanceToCollege": "600m from JC Bose YMCA Gate",
+      "gender": "boys",
+      "roomTypes": [
+        "Double Sharing",
+        "Triple Sharing"
+      ],
+      "price": 6000,
+      "priceMax": 9500,
+      "securityDeposit": 6000,
+      "reviewStatus": "reviewed",
+      "price_flag": false,
+      "duplicate_flag": false,
+      "duplicate_matches": [],
+      "address": "Street 4, Sector 7 near Escorts Metro, Faridabad",
+      "images": [
+        "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80"
+      ],
+      "amenities": [
+        "Wi-Fi",
+        "3 Times Meals",
+        "Air Conditioner (AC)",
+        "Attached Washroom",
+        "Power Backup",
+        "RO Water",
+        "Study Table"
+      ],
+      "verified": true,
+      "verificationStatus": "verified",
+      "rating": 4.6,
+      "reviewsCount": 29,
+      "owner": {
+        "name": "Kuldeep Rawat",
+        "phone": "+91 97110 54321",
+        "email": "kuldeep.metro@example.com",
+        "verified": true
+      },
+      "description": "Budget-friendly, highly popular PG among JC Bose (YMCA) engineering students. Quick walking distance to Metro station.",
+      "rules": "No loud music after 11 PM. Cleanliness in shared spaces expected."
+    }
+  ],
+  "notifications": [],
+  "students": [
+    {
+      "id": "std-1793673890",
+      "name": "Ananya Sharma",
+      "email": "ananya@mru.edu.in",
+      "phone": "+91 98112 23344",
+      "gender": "female",
+      "collegeId": "mriirs",
+      "collegeName": "Manav Rachna (MRIIRS / MRU)",
+      "course": "B.Tech Computer Science",
+      "year": "2nd Year",
+      "roomSharing": "Double Sharing",
+      "budget": "8000-12000",
+      "amenities": [
+        "Wi-Fi",
+        "3 Times Meals",
+        "Air Conditioner (AC)",
+        "Attached Washroom"
+      ],
+      "emailVerified": true,
+      "registeredAt": "2026-11-03T07:45:00.000Z"
+    }
+  ],
+  "owners": [
+    {
+      "id": "own-1793672100",
+      "name": "Ramesh Chawla",
+      "phone": "+91 98101 23456",
+      "email": "ramesh@rentdirect.com",
+      "registeredAt": "2026-11-03T06:30:00.000Z"
+    }
+  ],
+  "inquiries": [
+    {
+      "id": "inq-1793674200",
+      "propertyTitle": "Aravali Heights Student Living",
+      "name": "Ananya Sharma",
+      "phone": "+91 98112 23344",
+      "college": "Manav Rachna MRIIRS",
+      "date": "2026-11-07",
+      "submittedAt": "2026-11-03T07:55:00.000Z"
+    }
+  ]
+}

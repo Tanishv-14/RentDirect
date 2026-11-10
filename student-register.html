@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Registration | RentDirect</title>
+  <meta name="description" content="Register as a student step-by-step to find verified PGs near your college with zero brokerage.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ==========================================
+       HEADER & NAVIGATION (Un-congested, Clean)
+       ========================================== -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="brand-logo">
+          <div class="brand-logo-icon">RD</div>
+          Rent<span>Direct</span>
+        </a>
+
+        <!-- Clean, Spacious Navigation Links -->
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="listings.html" class="nav-link">Browse PGs</a></li>
+          <li><a href="index.html#colleges" class="nav-link">Colleges</a></li>
+          <li><a href="student-register.html" class="nav-link active">For Students</a></li>
+          <li><a href="owner-register.html" class="nav-link">For PG Owners</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <a href="owner-register.html" class="btn btn-primary btn-sm">+ List Your PG</a>
+          <button class="mobile-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       STUDENT STEP-BY-STEP REGISTRATION WIZARD
+       ========================================== -->
+  <main class="container">
+    <div class="auth-container">
+
+      <!-- Header -->
+      <div class="auth-header">
+        <span class="section-tag">Student Accommodation Portal</span>
+        <h1 id="wizard-heading">Register as a Student</h1>
+        <p id="wizard-subheading" style="color: var(--text-secondary); font-size: 0.95rem;">
+          Complete your profile step-by-step to unlock verified student housing with zero brokerage.
+        </p>
+      </div>
+
+      <!-- Step Progress Bar -->
+      <div class="wizard-progress-bar" id="wizard-progress-bar">
+        <div class="wizard-progress-line">
+          <div class="wizard-progress-fill" id="progress-fill" style="width: 10%;"></div>
+        </div>
+
+        <div class="wizard-step-node active" id="node-1">
+          <div class="wizard-node-circle">1</div>
+          <span class="wizard-node-label">Name</span>
+        </div>
+
+        <div class="wizard-step-node" id="node-2">
+          <div class="wizard-node-circle">2</div>
+          <span class="wizard-node-label">Email & OTP</span>
+        </div>
+
+        <div class="wizard-step-node" id="node-3">
+          <div class="wizard-node-circle">3</div>
+          <span class="wizard-node-label">College</span>
+        </div>
+
+        <div class="wizard-step-node" id="node-4">
+          <div class="wizard-node-circle">4</div>
+          <span class="wizard-node-label">Academics</span>
+        </div>
+
+        <div class="wizard-step-node" id="node-5">
+          <div class="wizard-node-circle">5</div>
+          <span class="wizard-node-label">Room</span>
+        </div>
+      </div>
+
+      <!-- SUCCESS COMPLETION SCREEN -->
+      <div id="reg-success-box" style="display: none; text-align: center; padding: 2.5rem 1rem;">
+        <div style="font-size: 3.5rem; margin-bottom: 1rem;">🎉</div>
+        <h2 style="font-size: 1.7rem; font-weight: 800; color: var(--brand-neutral); margin-bottom: 0.5rem;">
+          Welcome to RentDirect!
+        </h2>
+        <p id="reg-success-msg" style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.05rem;">
+          Your student profile and email verification are complete.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a id="reg-redirect-btn" href="listings.html" class="btn btn-primary btn-lg">
+            Explore PGs Near Your College →
+          </a>
+          <a href="index.html" class="btn btn-outline btn-lg">
+            Back to Home
+          </a>
+        </div>
+      </div>
+
+      <!-- FORM WIZARD STEPS -->
+      <form id="student-reg-form">
+
+        <!-- ==========================================
+             STEP 1: FULL NAME ONLY (Marked 3)
+             ========================================== -->
+        <div class="wizard-step active" id="step-1">
+          <div style="margin-bottom: 1.5rem;">
+            <label for="std-name" style="font-size: 1.1rem; font-weight: 700; color: var(--brand-neutral); display: block; margin-bottom: 0.5rem;">
+              What is your Full Name? *
+            </label>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">
+              Please enter your legal name as shown on your student ID card.
+            </p>
+            <input 
+              type="text" 
+              id="std-name" 
+              class="form-control" 
+              placeholder="e.g. Ananya Sharma" 
+              style="font-size: 1.05rem; padding: 0.85rem;" 
+              autofocus 
+              required 
+            />
+            <div id="name-error" style="color: var(--status-danger); font-size: 0.85rem; margin-top: 0.4rem; display: none;">
+              ⚠️ Please enter your name to continue.
+            </div>
+          </div>
+
+          <button type="button" id="btn-to-step-2" class="btn btn-primary btn-block btn-lg" style="margin-top: 2rem;">
+            Continue →
+          </button>
+        </div>
+
+        <!-- ==========================================
+             STEP 2: EMAIL & OTP VERIFICATION (Marked 4)
+             ========================================== -->
+        <div class="wizard-step" id="step-2">
+          
+          <!-- Sub-view 2A: Enter Email -->
+          <div id="email-entry-view">
+            <div style="margin-bottom: 1.5rem;">
+              <label for="std-email" style="font-size: 1.1rem; font-weight: 700; color: var(--brand-neutral); display: block; margin-bottom: 0.5rem;">
+                Your College or Personal Email Address *
+              </label>
+              <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">
+                We will send a 6-digit OTP to verify your student email.
+              </p>
+              <input 
+                type="email" 
+                id="std-email" 
+                class="form-control" 
+                placeholder="e.g. ananya@mru.edu.in" 
+                style="font-size: 1.05rem; padding: 0.85rem;" 
+                required 
+              />
+              <div id="email-error" style="color: var(--status-danger); font-size: 0.85rem; margin-top: 0.4rem; display: none;">
+                ⚠️ Please enter a valid email address.
+              </div>
+            </div>
+
+            <div class="wizard-nav-btns">
+              <button type="button" id="btn-back-to-1" class="btn btn-outline">
+                ← Back
+              </button>
+              <button type="button" id="btn-send-otp" class="btn btn-primary">
+                Send Verification Code →
+              </button>
+            </div>
+          </div>
+
+          <!-- Sub-view 2B: Enter OTP (Always 123456) -->
+          <div id="otp-entry-view" style="display: none;">
+            <div class="otp-box-wrapper">
+              <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">📩</div>
+              <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--brand-neutral); margin-bottom: 0.35rem;">
+                Enter 6-Digit OTP
+              </h3>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.6rem;">
+                Verification code sent to <strong id="display-target-email">your email</strong>
+              </p>
+              <div class="otp-hint-badge">
+                ⚡ Test OTP: <strong>123456</strong>
+              </div>
+
+              <div style="margin-top: 1.25rem;">
+                <input 
+                  type="text" 
+                  id="std-otp" 
+                  class="otp-digit-input" 
+                  placeholder="123456" 
+                  maxlength="6" 
+                  autocomplete="one-time-code"
+                />
+                <div id="otp-error" style="color: var(--status-danger); font-size: 0.85rem; margin-top: 0.5rem; display: none;">
+                  ❌ Incorrect OTP. Please enter <strong>123456</strong> for demo verification.
+                </div>
+                <div id="otp-success" style="color: var(--status-success); font-size: 0.9rem; margin-top: 0.5rem; font-weight: 700; display: none;">
+                  ✓ Email verified successfully!
+                </div>
+              </div>
+
+              <button type="button" id="btn-change-email" class="btn btn-ghost btn-sm" style="margin-top: 0.75rem; color: var(--brand-primary);">
+                ✏️ Change Email Address
+              </button>
+            </div>
+
+            <div class="wizard-nav-btns">
+              <button type="button" id="btn-back-to-email" class="btn btn-outline">
+                ← Back
+              </button>
+              <button type="button" id="btn-verify-otp" class="btn btn-primary">
+                Verify & Continue →
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ==========================================
+             STEP 3: COLLEGE & GENDER (Marked 5 & 6)
+             ========================================== -->
+        <div class="wizard-step" id="step-3">
+          <div style="margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--brand-neutral); margin-bottom: 0.35rem;">
+              Your College & Gender
+            </h3>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem;">
+              This helps us filter accommodations situated closest to your campus gate.
+            </p>
+
+            <!-- College Name Selection (Not showing 'in Faridabad') -->
+            <div class="form-field">
+              <label for="std-college">Select College / University *</label>
+              <select id="std-college" class="form-control" style="font-size: 1rem; padding: 0.75rem;" required>
+                <option value="">Select your College</option>
+                <option value="mriirs">Manav Rachna (MRIIRS / MRU)</option>
+                <option value="ymca">J.C. Bose UST (YMCA)</option>
+                <option value="lingayas">Lingaya's Vidyapeeth</option>
+                <option value="echelon">Echelon Institute of Technology</option>
+                <option value="alfalah">Al-Falah University</option>
+                <option value="davim">DAV Institute of Management</option>
+                <option value="other">Other College / University</option>
+              </select>
+            </div>
+
+            <!-- Custom College Name Input (if Other selected) -->
+            <div class="form-field" id="custom-college-box" style="display: none;">
+              <label for="std-custom-college">Type College Name *</label>
+              <input type="text" id="std-custom-college" class="form-control" placeholder="e.g. Bennett University, Amity, DU..." />
+            </div>
+
+            <!-- Gender Selection on Same Page -->
+            <div class="form-field">
+              <label for="std-gender">Gender *</label>
+              <select id="std-gender" class="form-control" style="font-size: 1rem; padding: 0.75rem;" required>
+                <option value="">Select Gender</option>
+                <option value="female">Female (Looking for Girls / Co-ed PG)</option>
+                <option value="male">Male (Looking for Boys / Co-ed PG)</option>
+                <option value="other">Other / Flexible</option>
+              </select>
+            </div>
+
+            <!-- Phone / WhatsApp -->
+            <div class="form-field">
+              <label for="std-phone">Phone / WhatsApp Number *</label>
+              <input 
+                type="tel" 
+                id="std-phone" 
+                class="form-control" 
+                placeholder="e.g. 9811223344" 
+                pattern="[0-9]{10}" 
+                maxlength="10" 
+                title="Please enter a 10-digit mobile number" 
+                required 
+              />
+              <div class="field-hint">Used for receiving direct owner contact and room visit confirmation.</div>
+            </div>
+
+            <div id="step-3-error" style="color: var(--status-danger); font-size: 0.85rem; margin-top: 0.5rem; display: none;">
+              ⚠️ Please fill in all required fields to proceed.
+            </div>
+          </div>
+
+          <div class="wizard-nav-btns">
+            <button type="button" id="btn-back-to-2" class="btn btn-outline">
+              ← Back
+            </button>
+            <button type="button" id="btn-to-step-4" class="btn btn-primary">
+              Continue →
+            </button>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             STEP 4: ACADEMIC DETAILS (Marked 7)
+             ========================================== -->
+        <div class="wizard-step" id="step-4">
+          <div style="margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--brand-neutral); margin-bottom: 0.35rem;">
+              Academic Information
+            </h3>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem;">
+              Helps PG owners understand your daily schedule and campus calendar.
+            </p>
+
+            <div class="form-field">
+              <label for="std-course">Course of Study</label>
+              <input type="text" id="std-course" class="form-control" placeholder="e.g. B.Tech Computer Science / BBA / Law" />
+            </div>
+
+            <div class="form-field">
+              <label for="std-year">Year of Study</label>
+              <select id="std-year" class="form-control">
+                <option value="1st Year (Fresher)">1st Year (Fresher)</option>
+                <option value="2nd Year">2nd Year</option>
+                <option value="3rd Year">3rd Year</option>
+                <option value="4th Year">4th Year</option>
+                <option value="Postgraduate">Postgraduate</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="wizard-nav-btns">
+            <button type="button" id="btn-back-to-3" class="btn btn-outline">
+              ← Back
+            </button>
+            <button type="button" id="btn-to-step-5" class="btn btn-primary">
+              Continue →
+            </button>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             STEP 5: ROOM & AMENITIES PREFERENCES (Marked 8)
+             ========================================== -->
+        <div class="wizard-step" id="step-5">
+          <div style="margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--brand-neutral); margin-bottom: 0.35rem;">
+              Accommodation Preferences
+            </h3>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem;">
+              Tell us your ideal room setup, budget, and essentials.
+            </p>
+
+            <div class="form-grid-2">
+              <div class="form-field">
+                <label for="std-sharing">Preferred Room Sharing *</label>
+                <select id="std-sharing" class="form-control" required>
+                  <option value="Double Sharing">Double Sharing (Most Popular)</option>
+                  <option value="Single Room">Single Room (Private)</option>
+                  <option value="Triple Sharing">Triple Sharing (Budget)</option>
+                  <option value="Any">Flexible / Any</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label for="std-budget">Monthly Budget Range *</label>
+                <select id="std-budget" class="form-control" required>
+                  <option value="6000-8000">₹6,000 - ₹8,000 / month</option>
+                  <option value="8000-12000" selected>₹8,000 - ₹12,000 / month</option>
+                  <option value="12000-16000">₹12,000 - ₹16,000 / month</option>
+                  <option value="16000+">₹16,000+ / month (Luxury)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label>Must-Have Amenities</label>
+              <div class="checkbox-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="amenity" value="Wi-Fi" checked> High-Speed Wi-Fi
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="amenity" value="3 Times Meals" checked> 3 Meals Included
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="amenity" value="Air Conditioner (AC)" checked> AC Room
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="amenity" value="Attached Washroom"> Attached Washroom
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="amenity" value="Power Backup"> Power Backup
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="amenity" value="Washing Machine"> Laundry / Washing
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="wizard-nav-btns">
+            <button type="button" id="btn-back-to-4" class="btn btn-outline">
+              ← Back
+            </button>
+            <button type="submit" id="btn-complete-reg" class="btn btn-primary btn-lg">
+              Complete Registration 🎉
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </main>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <div>&copy; 2026 RentDirect Marketplace. Built for Student Hackathon.</div>
+        <div>Configurable 3-Colour Design System • Ready for Flask API</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/mock-data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    // State Tracking
+    let currentStep = 1;
+    let isEmailVerified = false;
+
+    const progressFill = document.getElementById('progress-fill');
+    const nodes = [
+      document.getElementById('node-1'),
+      document.getElementById('node-2'),
+      document.getElementById('node-3'),
+      document.getElementById('node-4'),
+      document.getElementById('node-5')
+    ];
+
+    function setStep(step) {
+      currentStep = step;
+
+      // Update wizard steps visibility
+      document.querySelectorAll('.wizard-step').forEach((el, index) => {
+        el.classList.toggle('active', index + 1 === step);
+      });
+
+      // Update progress bar
+      const percentages = [10, 32, 55, 78, 100];
+      if (progressFill) progressFill.style.width = percentages[step - 1] + '%';
+
+      nodes.forEach((node, idx) => {
+        if (!node) return;
+        node.classList.remove('active', 'completed');
+        if (idx + 1 === step) {
+          node.classList.add('active');
+        } else if (idx + 1 < step) {
+          node.classList.add('completed');
+        }
+      });
+
+      window.scrollTo({ top: 120, behavior: 'smooth' });
+    }
+
+    // Toggle custom college input if 'Other' selected
+    document.getElementById('std-college').addEventListener('change', (e) => {
+      const customBox = document.getElementById('custom-college-box');
+      if (customBox) {
+        customBox.style.display = (e.target.value === 'other') ? 'block' : 'none';
+      }
+    });
+
+    // STEP 1 -> STEP 2 (Marked 3: Name only)
+    document.getElementById('btn-to-step-2').addEventListener('click', () => {
+      const nameInput = document.getElementById('std-name');
+      const nameError = document.getElementById('name-error');
+      const val = (nameInput.value || '').trim();
+
+      if (!val || val.length < 2) {
+        nameError.style.display = 'block';
+        nameInput.focus();
+        return;
+      }
+      nameError.style.display = 'none';
+      setStep(2);
+    });
+
+    // STEP 2: Send OTP via Centralized API Service
+    document.getElementById('btn-send-otp').addEventListener('click', async () => {
+      const emailInput = document.getElementById('std-email');
+      const emailError = document.getElementById('email-error');
+      const val = (emailInput.value || '').trim();
+
+      if (!val || !val.includes('@') || !val.includes('.')) {
+        emailError.style.display = 'block';
+        emailInput.focus();
+        return;
+      }
+      emailError.style.display = 'none';
+
+      // Centralized API call
+      await RentDirectAPI.sendOtp(val, 'student');
+
+      document.getElementById('display-target-email').textContent = val;
+      document.getElementById('email-entry-view').style.display = 'none';
+      document.getElementById('otp-entry-view').style.display = 'block';
+
+      // Auto focus OTP
+      const otpInput = document.getElementById('std-otp');
+      otpInput.value = '';
+      otpInput.focus();
+    });
+
+    // STEP 2: Change Email
+    document.getElementById('btn-change-email').addEventListener('click', () => {
+      document.getElementById('otp-entry-view').style.display = 'none';
+      document.getElementById('email-entry-view').style.display = 'block';
+      document.getElementById('std-email').focus();
+    });
+
+    document.getElementById('btn-back-to-email').addEventListener('click', () => {
+      document.getElementById('otp-entry-view').style.display = 'none';
+      document.getElementById('email-entry-view').style.display = 'block';
+    });
+
+    // STEP 2: Verify OTP via Centralized API Service
+    document.getElementById('btn-verify-otp').addEventListener('click', async () => {
+      const email = (document.getElementById('std-email').value || '').trim();
+      const otpInput = document.getElementById('std-otp');
+      const otpError = document.getElementById('otp-error');
+      const otpSuccess = document.getElementById('otp-success');
+      const val = (otpInput.value || '').trim();
+
+      // Centralized API call
+      const result = await RentDirectAPI.verifyOtp(email, val);
+
+      if (result.success) {
+        isEmailVerified = true;
+        otpError.style.display = 'none';
+        otpSuccess.style.display = 'block';
+
+        setTimeout(() => {
+          setStep(3);
+        }, 600);
+      } else {
+        otpError.style.display = 'block';
+        otpSuccess.style.display = 'none';
+        otpInput.focus();
+      }
+    });
+
+    // Back to Step 1
+    document.getElementById('btn-back-to-1').addEventListener('click', () => {
+      setStep(1);
+    });
+
+    // STEP 3 -> STEP 4 (College & Gender)
+    document.getElementById('btn-to-step-4').addEventListener('click', () => {
+      const collegeSelect = document.getElementById('std-college');
+      const customCollege = document.getElementById('std-custom-college');
+      const genderSelect = document.getElementById('std-gender');
+      const phoneInput = document.getElementById('std-phone');
+      const err = document.getElementById('step-3-error');
+
+      if (!collegeSelect.value) {
+        err.textContent = '⚠️ Please select your college/university.';
+        err.style.display = 'block';
+        collegeSelect.focus();
+        return;
+      }
+
+      if (collegeSelect.value === 'other' && !customCollege.value.trim()) {
+        err.textContent = '⚠️ Please enter your college name.';
+        err.style.display = 'block';
+        customCollege.focus();
+        return;
+      }
+
+      if (!genderSelect.value) {
+        err.textContent = '⚠️ Please select your gender preference.';
+        err.style.display = 'block';
+        genderSelect.focus();
+        return;
+      }
+
+      const phoneVal = (phoneInput.value || '').trim();
+      if (!phoneVal || phoneVal.length < 10) {
+        err.textContent = '⚠️ Please enter a valid 10-digit phone number.';
+        err.style.display = 'block';
+        phoneInput.focus();
+        return;
+      }
+
+      err.style.display = 'none';
+      setStep(4);
+    });
+
+    // Back to Step 2
+    document.getElementById('btn-back-to-2').addEventListener('click', () => {
+      setStep(2);
+    });
+
+    // STEP 4 -> STEP 5 (Academics)
+    document.getElementById('btn-to-step-5').addEventListener('click', () => {
+      setStep(5);
+    });
+
+    // Back to Step 3
+    document.getElementById('btn-back-to-3').addEventListener('click', () => {
+      setStep(3);
+    });
+
+    // Back to Step 4
+    document.getElementById('btn-back-to-4').addEventListener('click', () => {
+      setStep(4);
+    });
+
+    // FINAL SUBMIT (Step 5 - Marked 8)
+    document.getElementById('student-reg-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById('btn-complete-reg');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Completing registration...';
+
+      const collegeSelect = document.getElementById('std-college');
+      const collegeId = collegeSelect.value;
+      const customCollege = document.getElementById('std-custom-college')?.value.trim();
+      const collegeName = (collegeId === 'other' && customCollege)
+        ? customCollege
+        : (collegeSelect.options[collegeSelect.selectedIndex]?.text || 'Nearby College');
+
+      const amenities = Array.from(document.querySelectorAll('input[name="amenity"]:checked')).map(c => c.value);
+
+      const studentData = {
+        name: document.getElementById('std-name').value.trim(),
+        email: document.getElementById('std-email').value.trim(),
+        phone: document.getElementById('std-phone').value.trim(),
+        gender: document.getElementById('std-gender').value,
+        collegeId: collegeId,
+        collegeName: collegeName,
+        course: document.getElementById('std-course').value.trim(),
+        year: document.getElementById('std-year').value,
+        roomSharing: document.getElementById('std-sharing').value,
+        budget: document.getElementById('std-budget').value,
+        amenities: amenities,
+        emailVerified: true
+      };
+
+      try {
+        const response = await RentDirectAPI.registerStudent(studentData);
+        RentDirectUI.showToast('Registration successful! Welcome to RentDirect.', 'success');
+
+        // Hide wizard and progress
+        document.getElementById('student-reg-form').style.display = 'none';
+        document.getElementById('wizard-progress-bar').style.display = 'none';
+        document.getElementById('wizard-heading').textContent = 'Registration Complete';
+        document.getElementById('wizard-subheading').textContent = 'Your student profile is active and verified.';
+
+        const successBox = document.getElementById('reg-success-box');
+        const successMsg = document.getElementById('reg-success-msg');
+        const redirectBtn = document.getElementById('reg-redirect-btn');
+
+        successMsg.textContent = `Welcome ${studentData.name}! We've saved your room preferences for ${collegeName}.`;
+        
+        if (studentData.collegeId && studentData.collegeId !== 'other') {
+          redirectBtn.href = `listings.html?college=${studentData.collegeId}`;
+          redirectBtn.textContent = `View PGs near ${collegeName} →`;
+        } else {
+          redirectBtn.href = `listings.html`;
+          redirectBtn.textContent = `Browse All Accommodations →`;
+        }
+
+        successBox.style.display = 'block';
+      } catch (err) {
+        console.error('Registration failed', err);
+        RentDirectUI.showToast('Registration failed. Please try again.', 'danger');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Complete Registration 🎉';
+      }
+    });
+  </script>
+</body>
+</html>
