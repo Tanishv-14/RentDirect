@@ -1,6 +1,6 @@
-# RentDirect - Student Accommodation Marketplace
+# Rent Direct - Student Accommodation Marketplace
 
-RentDirect is a responsive student accommodation platform connecting college students with verified PG owners in Faridabad (with special focus on **Manav Rachna**, **JC Bose YMCA**, and **Lingaya's**).
+Rent Direct is a responsive student accommodation platform connecting college students with verified PG owners in Faridabad (with special focus on **Manav Rachna**, **JC Bose YMCA**, and **Lingaya's**).
 
 ---
 

@@ -247,7 +247,7 @@ function initAuthPanel() {
         <div class="auth-modal-card">
           <div class="auth-modal-header">
             <div>
-              <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--brand-neutral);">Sign In to RentDirect</h3>
+              <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--brand-neutral);">Sign In to Rent Direct</h3>
               <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.2rem;">
                 Select your role to access your portal.
               </p>
@@ -699,7 +699,7 @@ async function updateAdminNotificationCount() {
 function toggleAdminModal(open) {
   // Guard: Only Backend Team can open this modal
   if (open && !RentDirectAPI.isBackendTeam()) {
-    showToast('Access Denied: Only RentDirect Backend Team can approve listings.', 'danger');
+    showToast('Access Denied: Only Rent Direct Backend Team can approve listings.', 'danger');
     toggleLoginModal(true);
     switchAuthTab('backend_team');
     return;
