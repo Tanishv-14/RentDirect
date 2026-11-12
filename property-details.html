@@ -517,6 +517,9 @@
         </div>
       `).join('');
 
+      const comparedIds = window.RentDirectUI?.getCompareIds ? RentDirectUI.getCompareIds() : [];
+      const isCompared = comparedIds.includes(String(item.id));
+
       const roomTypesText = (item.roomTypes || ['Single', 'Double Sharing']).join(' • ');
 
       const content = `
@@ -542,7 +545,7 @@
 
           <!-- Title & Badges Header -->
           <div style="margin-bottom: 1.5rem;">
-            <div style="display: flex; gap: 0.6rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
+            <div style="display: flex; gap: 0.6rem; margin-bottom: 0.5rem; flex-wrap: wrap; align-items: center;">
               <span class="active-badge-pill" style="background: var(--brand-secondary-light); color: var(--brand-secondary);">
                 🎓 ${item.collegeName}
               </span>
@@ -552,6 +555,10 @@
               <span class="active-badge-pill" data-property-review-badge style="background: ${reviewBadge.className === 'reviewed' ? '#d1fae5' : reviewBadge.className === 'unverified' ? '#fee2e2' : '#fef3c7'}; color: ${reviewBadge.className === 'reviewed' ? '#065f46' : reviewBadge.className === 'unverified' ? '#991b1b' : '#92400e'};">
                 ${reviewBadge.label}
               </span>
+              <button type="button" class="compare-toggle-btn ${isCompared ? 'active' : ''}" data-compare-id="${item.id}" onclick="RentDirectUI.toggleCompare('${item.id}', event)" style="position: static; padding: 0.25rem 0.75rem;">
+                <span class="compare-icon">${isCompared ? '✓' : '+'}</span>
+                <span class="compare-label">${isCompared ? 'In Compare List' : 'Compare'}</span>
+              </button>
             </div>
 
             <h1 class="property-heading-title" style="font-size: 2.2rem; font-weight: 800; color: var(--brand-neutral); margin-bottom: 0.35rem;">

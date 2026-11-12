@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCollegeDropdowns();
   initAuthPanel();
   initAdminVerificationCenter();
+  initCompareSystem();
 });
 
 window.addEventListener('rentdirect:database-changed', () => {
@@ -140,12 +141,19 @@ function createPropertyCardHTML(property, options = {}) {
         </div>
   ` : '';
 
+  const comparedIds = getCompareIds();
+  const isCompared = comparedIds.includes(String(property.id));
+
   return `
     <article class="property-card" data-id="${property.id}">
       <div class="property-image-box">
         <img class="property-img" src="${property.images[0]}" alt="${property.title}" loading="lazy" />
         <span class="badge-gender ${genderClass}">${genderLabel}</span>
         <span class="review-status-badge ${review.className}">${review.label}</span>
+        <button type="button" class="compare-toggle-btn ${isCompared ? 'active' : ''}" data-compare-id="${property.id}" onclick="RentDirectUI.toggleCompare('${property.id}', event)" aria-label="Compare ${property.title}">
+          <span class="compare-icon">${isCompared ? '✓' : '+'}</span>
+          <span class="compare-label">${isCompared ? 'Compared' : 'Compare'}</span>
+        </button>
       </div>
       <div class="property-body">
         <div class="property-college-tag">${property.collegeName}</div>
@@ -1276,6 +1284,514 @@ function showToast(message, type = 'success') {
   }, 3500);
 }
 
+// -----------------------------------------------------------------------------
+// 7. ACCOMMODATION COMPARISON SYSTEM
+// -----------------------------------------------------------------------------
+const COMPARE_STORAGE_KEY = 'rentdirect_compare_ids';
+
+function getCompareIds() {
+  try {
+    const raw = sessionStorage.getItem(COMPARE_STORAGE_KEY);
+    const ids = raw ? JSON.parse(raw) : [];
+    return Array.isArray(ids) ? ids.map(String) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveCompareIds(ids) {
+  try {
+    sessionStorage.setItem(COMPARE_STORAGE_KEY, JSON.stringify(ids.slice(0, 3)));
+    window.dispatchEvent(new CustomEvent('rentdirect:compare-changed', { detail: { ids } }));
+  } catch (e) {
+    console.error('Error saving compare IDs to sessionStorage', e);
+  }
+}
+
+function toggleCompare(propertyId, event) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  const idStr = String(propertyId);
+  let ids = getCompareIds();
+  const index = ids.indexOf(idStr);
+
+  if (index >= 0) {
+    ids.splice(index, 1);
+    saveCompareIds(ids);
+    showToast('Removed from comparison', 'info');
+  } else {
+    if (ids.length >= 3) {
+      showToast('You can compare up to 3 PGs at a time.', 'danger');
+      return;
+    }
+    ids.push(idStr);
+    saveCompareIds(ids);
+    showToast(`Added to comparison (${ids.length}/3)`, 'success');
+  }
+  updateCompareUI();
+}
+
+function removeCompare(propertyId) {
+  const idStr = String(propertyId);
+  let ids = getCompareIds();
+  ids = ids.filter(id => id !== idStr);
+  saveCompareIds(ids);
+  showToast('Removed from comparison', 'info');
+  updateCompareUI();
+}
+
+function clearCompare() {
+  saveCompareIds([]);
+  showToast('Comparison cleared', 'info');
+  updateCompareUI();
+}
+
+function ensureCompareDOM() {
+  // 1. Sticky Bottom Comparison Bar
+  if (!document.getElementById('compare-sticky-bar')) {
+    const bar = document.createElement('div');
+    bar.id = 'compare-sticky-bar';
+    bar.className = 'compare-sticky-bar';
+    bar.setAttribute('role', 'region');
+    bar.setAttribute('aria-label', 'Accommodation Comparison Bar');
+    bar.innerHTML = `
+      <div class="compare-bar-content">
+        <div class="compare-bar-left">
+          <div class="compare-bar-badge">
+            <span>⚖️</span>
+            <strong id="compare-bar-count">0/3 Selected</strong>
+          </div>
+          <div class="compare-bar-chips" id="compare-bar-chips"></div>
+        </div>
+        <div class="compare-bar-actions">
+          <button type="button" class="btn btn-ghost btn-sm compare-clear-btn" onclick="RentDirectUI.clearCompare()">
+            Clear
+          </button>
+          <button type="button" class="btn btn-primary btn-sm compare-now-btn" onclick="RentDirectUI.openCompareModal()">
+            Compare Now →
+          </button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(bar);
+  }
+
+  // 2. Compare Modal
+  if (!document.getElementById('compare-modal')) {
+    const modal = document.createElement('div');
+    modal.id = 'compare-modal';
+    modal.className = 'admin-modal-overlay';
+    modal.innerHTML = `
+      <div class="admin-modal-card compare-modal-card">
+        <div class="admin-modal-header" style="background: rgba(255, 255, 255, 0.95);">
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+              <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--brand-neutral);">
+                ⚖️ Accommodation Comparison
+              </h3>
+              <span class="active-badge-pill" id="compare-modal-count-badge">0 PGs</span>
+            </div>
+            <p style="font-size: 0.825rem; color: var(--text-secondary); margin-top: 0.2rem;">
+              Side-by-side transparent metrics: rent, true monthly cost, security deposit, notice period, and house rules.
+            </p>
+          </div>
+          <button type="button" onclick="RentDirectUI.closeCompareModal()" style="background: none; border: none; font-size: 1.6rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+        </div>
+
+        <div class="admin-modal-body" style="padding: 1.25rem; overflow-y: auto;">
+          <div class="compare-table-wrapper" id="compare-table-wrapper">
+            <!-- Dynamic comparison table -->
+          </div>
+        </div>
+
+        <div style="padding: 1rem 1.5rem; background: var(--bg-surface-alt); border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+          <div style="font-size: 0.825rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.4rem;">
+            <span>🛡️</span> <strong>100% Zero Brokerage:</strong> Connect directly with owners. No commissions added.
+          </div>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="RentDirectUI.clearCompare(); RentDirectUI.closeCompareModal();">
+              🗑️ Clear Comparison
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="RentDirectUI.closeCompareModal()">
+              Done
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeCompareModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('open')) {
+        closeCompareModal();
+      }
+    });
+  }
+}
+
+async function updateCompareUI() {
+  ensureCompareDOM();
+  const ids = getCompareIds();
+
+  // 1. Update all compare toggle buttons across cards on the current page
+  document.querySelectorAll('[data-compare-id]').forEach(btn => {
+    const propId = String(btn.dataset.compareId);
+    const isSelected = ids.includes(propId);
+    btn.classList.toggle('active', isSelected);
+    btn.setAttribute('aria-pressed', String(isSelected));
+    btn.innerHTML = `
+      <span class="compare-icon">${isSelected ? '✓' : '+'}</span>
+      <span class="compare-label">${isSelected ? 'Compared' : 'Compare'}</span>
+    `;
+  });
+
+  // 2. Update Sticky Bar
+  const bar = document.getElementById('compare-sticky-bar');
+  const countEl = document.getElementById('compare-bar-count');
+  const chipsContainer = document.getElementById('compare-bar-chips');
+
+  if (!bar) return;
+
+  if (ids.length === 0) {
+    bar.classList.remove('visible');
+    const modal = document.getElementById('compare-modal');
+    if (modal && modal.classList.contains('open')) {
+      closeCompareModal();
+    }
+    return;
+  }
+
+  bar.classList.add('visible');
+  if (countEl) countEl.textContent = `${ids.length}/3 Selected`;
+
+  try {
+    let properties = [];
+    if (window.currentProperties && window.currentProperties.length > 0) {
+      properties = window.currentProperties;
+    } else if (window.RentDirectAPI) {
+      properties = await RentDirectAPI.getProperties();
+    }
+    const propMap = new Map(properties.map(p => [String(p.id), p]));
+
+    if (chipsContainer) {
+      chipsContainer.innerHTML = ids.map(id => {
+        const prop = propMap.get(id);
+        const title = prop ? prop.title : `PG #${id}`;
+        return `
+          <div class="compare-chip" title="${title}">
+            <span>${title}</span>
+            <button type="button" class="compare-chip-remove" onclick="RentDirectUI.removeCompare('${id}')" aria-label="Remove ${title}">&times;</button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // If modal is open, re-render it in real-time
+    const modal = document.getElementById('compare-modal');
+    if (modal && modal.classList.contains('open')) {
+      renderCompareTableContent(ids, propMap);
+    }
+  } catch (e) {
+    console.error('Error updating compare bar', e);
+  }
+}
+
+async function openCompareModal() {
+  ensureCompareDOM();
+  const ids = getCompareIds();
+  if (ids.length === 0) {
+    showToast('Select at least 1 PG to compare.', 'info');
+    return;
+  }
+
+  const modal = document.getElementById('compare-modal');
+  if (!modal) return;
+
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  try {
+    let properties = [];
+    if (window.currentProperties && window.currentProperties.length > 0) {
+      properties = window.currentProperties;
+    } else if (window.RentDirectAPI) {
+      properties = await RentDirectAPI.getProperties();
+    }
+    const propMap = new Map(properties.map(p => [String(p.id), p]));
+    renderCompareTableContent(ids, propMap);
+  } catch (e) {
+    console.error('Error rendering comparison modal', e);
+  }
+}
+
+function closeCompareModal() {
+  const modal = document.getElementById('compare-modal');
+  if (modal) modal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function renderCompareTableContent(ids, propMap) {
+  const wrapper = document.getElementById('compare-table-wrapper');
+  const countBadge = document.getElementById('compare-modal-count-badge');
+  if (!wrapper) return;
+
+  if (countBadge) countBadge.textContent = `${ids.length} of 3 PGs Selected`;
+
+  const selectedProps = ids.map(id => propMap.get(id)).filter(Boolean);
+
+  if (selectedProps.length === 0) {
+    wrapper.innerHTML = `
+      <div style="text-align: center; padding: 3rem 1rem;">
+        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">⚖️</div>
+        <h4>No PGs selected for comparison</h4>
+        <p style="color: var(--text-secondary); margin-top: 0.25rem;">Select up to 3 PGs from the listings to compare metrics.</p>
+      </div>
+    `;
+    return;
+  }
+
+  // Helper for rules extraction
+  const getCurfew = p => {
+    const match = (p.rules || '').match(/\b\d{1,2}(?::\d{2})?\s*(?:AM|PM)\b/i);
+    return match ? `${match[0]} Gate Closing` : '10:00 PM (Standard Student Curfew)';
+  };
+
+  const getFoodPolicy = p => {
+    const hasMeals = (p.amenities || []).some(a => a.toLowerCase().includes('meal'));
+    return hasMeals
+      ? '🍽️ 3 Times Daily Meals Included (Homely Breakfast, Lunch & Dinner)'
+      : '🍜 Self-Cooking / External Mess available nearby';
+  };
+
+  const getGuestPolicy = p => {
+    if ((p.rules || '').toLowerCase().includes('visitor') || (p.rules || '').toLowerCase().includes('guest')) {
+      return '👥 Visitors allowed in common reception/lounge until 8:00 PM';
+    }
+    return '👥 Daytime visitors permitted in common area (No overnight guests)';
+  };
+
+  const tableHTML = `
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>
+            <div class="compare-metric-title">Accommodation</div>
+            <div class="compare-metric-desc">Overview & Location</div>
+          </th>
+          ${selectedProps.map(p => {
+            const review = getPropertyReviewBadge(p);
+            return `
+              <th>
+                <div class="compare-property-header">
+                  <img src="${p.images[0]}" alt="${p.title}" class="compare-property-img" />
+                  <div class="compare-property-title">${p.title}</div>
+                  <div style="display: flex; gap: 0.35rem; flex-wrap: wrap; margin-top: 0.2rem;">
+                    <span class="compare-pill-tag" style="background: var(--brand-secondary-light); color: var(--brand-secondary);">
+                      🎓 ${p.collegeName || 'Faridabad Campus'}
+                    </span>
+                    <span class="compare-pill-tag ${p.gender === 'boys' ? 'badge-gender boys' : p.gender === 'girls' ? 'badge-gender girls' : 'badge-gender unisex'}" style="position: static; padding: 0.15rem 0.5rem;">
+                      ${p.gender.toUpperCase()}
+                    </span>
+                    <span class="review-status-badge ${review.className}" style="position: static; font-size: 0.7rem; padding: 0.15rem 0.5rem;">
+                      ${review.label}
+                    </span>
+                  </div>
+                  <button type="button" class="compare-table-remove-btn" onclick="RentDirectUI.removeCompare('${p.id}')">
+                    ✕ Remove from compare
+                  </button>
+                </div>
+              </th>
+            `;
+          }).join('')}
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Base Monthly Rent -->
+        <tr>
+          <td>
+            <div class="compare-metric-title">💵 Base Monthly Rent</div>
+            <div class="compare-metric-desc">Core room rent without food/extras</div>
+          </td>
+          ${selectedProps.map(p => `
+            <td>
+              <div class="compare-highlight-price">₹${p.price.toLocaleString('en-IN')} <span style="font-size: 0.78rem; font-weight: 600; color: var(--text-secondary);">/month</span></div>
+              <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.35rem;">
+                Config: <strong>${(p.roomTypes || ['Single', 'Double Sharing']).join(' • ')}</strong>
+              </div>
+            </td>
+          `).join('')}
+        </tr>
+
+        <!-- True Monthly Cost -->
+        <tr style="background: rgba(248, 250, 252, 0.65);">
+          <td>
+            <div class="compare-metric-title">🏷️ True Monthly Cost</div>
+            <div class="compare-metric-desc">Estimated total: Rent + Mess + Maint + Utilities</div>
+          </td>
+          ${selectedProps.map(p => {
+            const cost = getTrueCostBreakdown(p);
+            return `
+              <td>
+                <div class="compare-highlight-price" style="color: var(--brand-secondary);">₹${cost.monthlyTotal.toLocaleString('en-IN')} <span style="font-size: 0.78rem; font-weight: 600; color: var(--text-secondary);">/month</span></div>
+                <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 0.4rem; display: grid; gap: 0.2rem; background: #fff; padding: 0.5rem 0.65rem; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
+                  <div>• Mess Food: <strong>₹${cost.messCharge.toLocaleString('en-IN')}</strong></div>
+                  <div>• Maintenance: <strong>₹${cost.maintenanceCharge.toLocaleString('en-IN')}</strong></div>
+                  <div>• Electricity/Utils: <strong>₹${cost.utilities.toLocaleString('en-IN')}</strong></div>
+                </div>
+              </td>
+            `;
+          }).join('')}
+        </tr>
+
+        <!-- Security Deposit -->
+        <tr>
+          <td>
+            <div class="compare-metric-title">🔒 Security Deposit</div>
+            <div class="compare-metric-desc">Refundable upon move-out</div>
+          </td>
+          ${selectedProps.map(p => `
+            <td>
+              <strong style="color: var(--brand-neutral); font-size: 1rem;">₹${(p.securityDeposit || p.price).toLocaleString('en-IN')}</strong>
+              <div style="font-size: 0.76rem; color: #166534; font-weight: 600; margin-top: 0.2rem;">
+                ✓ 100% Refundable at checkout
+              </div>
+            </td>
+          `).join('')}
+        </tr>
+
+        <!-- Notice Period -->
+        <tr>
+          <td>
+            <div class="compare-metric-title">📋 Notice Period</div>
+            <div class="compare-metric-desc">Advance move-out notice</div>
+          </td>
+          ${selectedProps.map(p => `
+            <td>
+              <strong style="color: var(--brand-neutral);">${p.noticePeriod || '1 Month'}</strong>
+              <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 0.2rem;">
+                Standard campus rental term
+              </div>
+            </td>
+          `).join('')}
+        </tr>
+
+        <!-- Distance to Campus -->
+        <tr>
+          <td>
+            <div class="compare-metric-title">📍 Distance to Campus</div>
+            <div class="compare-metric-desc">Proximity to university gate</div>
+          </td>
+          ${selectedProps.map(p => `
+            <td>
+              <strong style="color: var(--brand-neutral);">${p.distanceToCollege || p.address}</strong>
+              <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                📍 ${p.address}
+              </div>
+            </td>
+          `).join('')}
+        </tr>
+
+        <!-- Curfew & Timings -->
+        <tr>
+          <td>
+            <div class="compare-metric-title">⏰ Curfew &amp; Timings</div>
+            <div class="compare-metric-desc">Campus gate closing rule</div>
+          </td>
+          ${selectedProps.map(p => `
+            <td>
+              <span class="active-badge-pill" style="background: #fef3c7; color: #92400e;">
+                ${getCurfew(p)}
+              </span>
+            </td>
+          `).join('')}
+        </tr>
+
+        <!-- Food & Mess -->
+        <tr>
+          <td>
+            <div class="compare-metric-title">🍲 Food &amp; Mess Policy</div>
+            <div class="compare-metric-desc">Meals provision on site</div>
+          </td>
+          ${selectedProps.map(p => `
+            <td>
+              <div style="font-size: 0.825rem; color: var(--brand-neutral); line-height: 1.45;">
+                ${getFoodPolicy(p)}
+              </div>
+            </td>
+          `).join('')}
+        </tr>
+
+        <!-- Guest Policy -->
+        <tr>
+          <td>
+            <div class="compare-metric-title">🚪 Guests &amp; Visitors</div>
+            <div class="compare-metric-desc">Entry and staying rules</div>
+          </td>
+          ${selectedProps.map(p => `
+            <td>
+              <div style="font-size: 0.825rem; color: var(--text-secondary); line-height: 1.45;">
+                ${getGuestPolicy(p)}
+              </div>
+            </td>
+          `).join('')}
+        </tr>
+
+        <!-- Key Amenities -->
+        <tr>
+          <td>
+            <div class="compare-metric-title">✨ Key Amenities</div>
+            <div class="compare-metric-desc">Facilities verified on-site</div>
+          </td>
+          ${selectedProps.map(p => `
+            <td>
+              <div style="display: flex; flex-wrap: wrap; gap: 0.35rem;">
+                ${(p.amenities || []).slice(0, 6).map(a => `<span class="amenity-chip" style="font-size: 0.72rem;">${a}</span>`).join('')}
+              </div>
+            </td>
+          `).join('')}
+        </tr>
+
+        <!-- Direct Actions -->
+        <tr>
+          <td>
+            <div class="compare-metric-title">Direct Connect</div>
+            <div class="compare-metric-desc">0% Brokerage booking</div>
+          </td>
+          ${selectedProps.map(p => `
+            <td>
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <a href="property-details.html?id=${p.id}" class="btn btn-primary btn-sm btn-block">
+                  View Full Details →
+                </a>
+                <a href="tel:${p.owner?.phone || '+919810012345'}" class="btn btn-outline btn-sm btn-block">
+                  📞 Call Owner
+                </a>
+              </div>
+            </td>
+          `).join('')}
+        </tr>
+      </tbody>
+    </table>
+  `;
+
+  wrapper.innerHTML = tableHTML;
+}
+
+function initCompareSystem() {
+  ensureCompareDOM();
+  updateCompareUI();
+
+  window.addEventListener('rentdirect:compare-changed', () => {
+    updateCompareUI();
+  });
+}
+
 window.RentDirectUI = {
   createPropertyCardHTML,
   computePropertyFlags,
@@ -1299,5 +1815,12 @@ window.RentDirectUI = {
   toggleDbModal,
   switchDbTab,
   refreshDbInspector,
-  resetInspectorData
+  resetInspectorData,
+  // Accommodation Comparison System
+  toggleCompare,
+  removeCompare,
+  clearCompare,
+  openCompareModal,
+  closeCompareModal,
+  getCompareIds
 };
