@@ -6,7 +6,7 @@
   <meta name="referrer" content="origin-when-cross-origin">
   <title>Rent Direct | Browse Student PGs</title>
   <meta name="description" content="Explore verified student PGs and hostels near Manav Rachna and other Faridabad colleges.">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=2.2">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -228,6 +228,163 @@
         height: 210px;
       }
     }
+
+    /* Quick Filter Chips (Glassmorphic & Mobile-Optimized) */
+    .quick-filters-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(226, 232, 240, 0.95);
+      border-radius: var(--radius-lg, 16px);
+      padding: 0.55rem 0.85rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quick-filters-label {
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .quick-filters-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--brand-primary, #2563eb);
+      background: rgba(37, 99, 235, 0.08);
+      border: 1px solid rgba(37, 99, 235, 0.16);
+      padding: 0.35rem 0.7rem;
+      border-radius: 9999px;
+      white-space: nowrap;
+    }
+
+    .quick-filters-track,
+    .mobile-filter-pills,
+    .filter-pills-scroll {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.55rem !important;
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      scrollbar-width: none !important;
+      flex-wrap: nowrap !important;
+      width: 100% !important;
+      padding: 0.2rem 0.1rem !important;
+      margin: 0 !important;
+    }
+
+    .quick-filters-track::-webkit-scrollbar,
+    .mobile-filter-pills::-webkit-scrollbar,
+    .filter-pills-scroll::-webkit-scrollbar {
+      display: none !important;
+    }
+
+    .filter-pill-chip {
+      appearance: none !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      outline: none !important;
+      box-sizing: border-box !important;
+      flex-shrink: 0 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 0.45rem !important;
+      padding: 0.45rem 1rem !important;
+      border-radius: 9999px !important;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+      font-size: 0.825rem !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.01em !important;
+      line-height: 1.25 !important;
+      color: #334155 !important;
+      background: #ffffff !important;
+      border: 1px solid rgba(203, 213, 225, 0.9) !important;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.03) !important;
+      cursor: pointer !important;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      user-select: none !important;
+      white-space: nowrap !important;
+      min-height: 38px !important;
+      text-decoration: none !important;
+    }
+
+    .filter-pill-chip .pill-icon {
+      font-size: 0.95rem;
+      line-height: 1;
+      pointer-events: none;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .filter-pill-chip .pill-text {
+      pointer-events: none;
+    }
+
+    .filter-pill-chip:hover {
+      background: #f8fafc !important;
+      border-color: rgba(37, 99, 235, 0.45) !important;
+      color: #2563eb !important;
+      transform: translateY(-1.5px) !important;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.14) !important;
+    }
+
+    .filter-pill-chip:active {
+      transform: scale(0.97) !important;
+    }
+
+    .filter-pill-chip.active {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+      color: #ffffff !important;
+      border-color: #1d4ed8 !important;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
+      transform: translateY(-1px) !important;
+      font-weight: 700 !important;
+    }
+
+    .filter-pill-chip.active:hover {
+      background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%) !important;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45) !important;
+      color: #ffffff !important;
+    }
+
+    .filter-pill-chip:focus-visible {
+      outline: 2px solid #2563eb !important;
+      outline-offset: 2px !important;
+    }
+
+    @media (max-width: 768px) {
+      .quick-filters-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.45rem;
+        padding: 0.55rem 0.75rem;
+        border-radius: var(--radius-md, 12px);
+        margin-bottom: 1rem;
+      }
+      .quick-filters-label {
+        margin-bottom: 0.15rem;
+      }
+      .quick-filters-badge {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.55rem;
+      }
+      .filter-pill-chip {
+        padding: 0.42rem 0.85rem !important;
+        font-size: 0.8rem !important;
+        min-height: 36px !important;
+      }
+    }
   </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 </head>
@@ -367,17 +524,49 @@
 
       <!-- RIGHT: LISTINGS RESULTS -->
       <section>
-        <!-- Quick Filter Pills (Horizontal Scroll on Mobile without Clipping) -->
-        <div class="mobile-filter-pills" id="quick-filter-pills" role="region" aria-label="Quick filters">
-          <button type="button" class="filter-pill-chip active" data-filter-type="all">✨ All PGs</button>
-          <button type="button" class="filter-pill-chip" data-filter-type="gender" data-filter-val="boys">👨 Boys PG</button>
-          <button type="button" class="filter-pill-chip" data-filter-type="gender" data-filter-val="girls">👩 Girls PG</button>
-          <button type="button" class="filter-pill-chip" data-filter-type="gender" data-filter-val="unisex">🤝 Co-Ed</button>
-          <button type="button" class="filter-pill-chip" data-filter-type="amenity" data-filter-val="Wi-Fi">📶 Wi-Fi</button>
-          <button type="button" class="filter-pill-chip" data-filter-type="amenity" data-filter-val="3 Times Meals">🍽️ Homely Meals</button>
-          <button type="button" class="filter-pill-chip" data-filter-type="amenity" data-filter-val="Air Conditioner (AC)">❄️ AC Rooms</button>
-          <button type="button" class="filter-pill-chip" data-filter-type="amenity" data-filter-val="Power Backup">⚡ Power Backup</button>
-          <button type="button" class="filter-pill-chip" data-filter-type="budget" data-filter-val="10000">💰 Under ₹10k</button>
+        <!-- Quick Filter Pills (Glassmorphic & Mobile-Scrollable) -->
+        <div class="quick-filters-container" role="region" aria-label="Quick accommodation filters">
+          <div class="quick-filters-label">
+            <span class="quick-filters-badge">⚡ Quick Filter</span>
+          </div>
+          <div class="quick-filters-track mobile-filter-pills" id="quick-filter-pills">
+            <button type="button" class="filter-pill-chip active" data-filter-type="all">
+              <span class="pill-icon">✨</span>
+              <span class="pill-text">All PGs</span>
+            </button>
+            <button type="button" class="filter-pill-chip" data-filter-type="gender" data-filter-val="boys">
+              <span class="pill-icon">👨</span>
+              <span class="pill-text">Boys PG</span>
+            </button>
+            <button type="button" class="filter-pill-chip" data-filter-type="gender" data-filter-val="girls">
+              <span class="pill-icon">👩</span>
+              <span class="pill-text">Girls PG</span>
+            </button>
+            <button type="button" class="filter-pill-chip" data-filter-type="gender" data-filter-val="unisex">
+              <span class="pill-icon">🤝</span>
+              <span class="pill-text">Co-Ed</span>
+            </button>
+            <button type="button" class="filter-pill-chip" data-filter-type="amenity" data-filter-val="Wi-Fi">
+              <span class="pill-icon">📶</span>
+              <span class="pill-text">Wi-Fi</span>
+            </button>
+            <button type="button" class="filter-pill-chip" data-filter-type="amenity" data-filter-val="3 Times Meals">
+              <span class="pill-icon">🍽️</span>
+              <span class="pill-text">Homely Meals</span>
+            </button>
+            <button type="button" class="filter-pill-chip" data-filter-type="amenity" data-filter-val="Air Conditioner (AC)">
+              <span class="pill-icon">❄️</span>
+              <span class="pill-text">AC Rooms</span>
+            </button>
+            <button type="button" class="filter-pill-chip" data-filter-type="amenity" data-filter-val="Power Backup">
+              <span class="pill-icon">⚡</span>
+              <span class="pill-text">Power Backup</span>
+            </button>
+            <button type="button" class="filter-pill-chip" data-filter-type="budget" data-filter-val="10000">
+              <span class="pill-icon">💰</span>
+              <span class="pill-text">Under ₹10k</span>
+            </button>
+          </div>
         </div>
 
         <div class="filter-results-bar">
