@@ -269,6 +269,117 @@
       gap: 0.5rem;
       margin: 0.75rem 0 1rem;
     }
+
+    @media (max-width: 768px) {
+      .details-layout {
+        margin: 1.25rem 0 3rem;
+        gap: 1.5rem;
+      }
+
+      .specs-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+        padding: 1rem;
+        margin: 1rem 0;
+      }
+
+      .amenities-full-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 0.65rem;
+      }
+
+      .move-in-checklist-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .owner-contact-card {
+        padding: 1.25rem;
+        position: static;
+      }
+
+      #property-map {
+        height: 240px;
+      }
+
+      .gallery-main {
+        aspect-ratio: 16 / 10;
+        width: 100%;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+      }
+
+      .gallery-side {
+        display: none;
+      }
+
+      .property-heading-title {
+        font-size: 1.65rem !important;
+        line-height: 1.25;
+      }
+
+      .btn-block {
+        min-height: 46px;
+        font-size: 0.95rem;
+        padding: 0.75rem 1rem;
+        white-space: normal;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .specs-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        padding: 0.85rem;
+      }
+
+      .spec-label {
+        font-size: 0.7rem;
+      }
+
+      .spec-value {
+        font-size: 0.9rem;
+      }
+
+      .amenities-full-grid {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+
+      #property-map {
+        height: 215px;
+      }
+
+      .property-heading-title {
+        font-size: 1.45rem !important;
+      }
+
+      .owner-profile-header {
+        gap: 0.75rem;
+        padding-bottom: 1rem;
+      }
+
+      .owner-avatar {
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
+      }
+    }
+
+    @media (max-width: 375px) {
+      .specs-grid {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+
+      .owner-contact-card {
+        padding: 1rem;
+      }
+
+      .property-map-card {
+        padding: 0.75rem;
+      }
+    }
   </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 </head>
@@ -443,7 +554,7 @@
               </span>
             </div>
 
-            <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--brand-neutral); margin-bottom: 0.35rem;">
+            <h1 class="property-heading-title" style="font-size: 2.2rem; font-weight: 800; color: var(--brand-neutral); margin-bottom: 0.35rem;">
               ${item.title}
             </h1>
             <p style="color: var(--text-secondary); font-size: 0.95rem; display: flex; align-items: center; gap: 0.4rem;">

@@ -139,6 +139,83 @@
     return null;
   }
 
+  function enableScrollSafeMap(map, container) {
+    if (!container) return;
+
+    // Ensure container allows native vertical page scrolling by default
+    container.style.touchAction = 'pan-y';
+
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.innerWidth <= 768;
+
+    // On touch/mobile devices, disable dragging initially to protect vertical scroll
+    if (isTouch) {
+      map.dragging.disable();
+      if (map.touchZoom) map.touchZoom.disable();
+    }
+
+    if (container.querySelector('.map-scroll-guard-btn')) return;
+
+    const guardBtn = document.createElement('button');
+    guardBtn.className = 'map-scroll-guard-btn';
+    guardBtn.setAttribute('type', 'button');
+    guardBtn.setAttribute('aria-label', 'Toggle interactive map navigation');
+    guardBtn.innerHTML = '<span>👆 Tap to explore map</span>';
+
+    let isInteracting = false;
+
+    function activateMap(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      isInteracting = true;
+      map.dragging.enable();
+      if (map.touchZoom) map.touchZoom.enable();
+      container.style.touchAction = 'none';
+      container.classList.add('map-interacting');
+      guardBtn.innerHTML = '<span>🔒 Lock map (scroll page)</span>';
+      guardBtn.classList.add('active');
+    }
+
+    function deactivateMap() {
+      if (!isInteracting) return;
+      isInteracting = false;
+      map.dragging.disable();
+      if (map.touchZoom) map.touchZoom.disable();
+      container.style.touchAction = 'pan-y';
+      container.classList.remove('map-interacting');
+      guardBtn.innerHTML = '<span>👆 Tap to explore map</span>';
+      guardBtn.classList.remove('active');
+    }
+
+    guardBtn.addEventListener('click', (e) => {
+      if (isInteracting) {
+        deactivateMap();
+      } else {
+        activateMap(e);
+      }
+    });
+
+    // Touch or click outside the map releases focus and re-enables effortless page scrolling
+    document.addEventListener('touchstart', (e) => {
+      if (isInteracting && !container.contains(e.target)) {
+        deactivateMap();
+      }
+    }, { passive: true });
+
+    document.addEventListener('mousedown', (e) => {
+      if (isInteracting && !container.contains(e.target)) {
+        deactivateMap();
+      }
+    });
+
+    container.appendChild(guardBtn);
+
+    window.addEventListener('resize', () => {
+      map.invalidateSize();
+    }, { passive: true });
+  }
+
   function createListingsMap(container, properties, selectedCollegeId) {
     const leaflet = getLeaflet();
     if (!leaflet) return setMapUnavailable(container, 'The map could not load. Check your connection and refresh the page.');
@@ -150,6 +227,7 @@
       const markerLayer = leaflet.layerGroup().addTo(map);
       state = { map, markerLayer };
       listingsMaps.set(container, state);
+      enableScrollSafeMap(map, container);
     }
 
     const { map, markerLayer } = state;
@@ -192,6 +270,7 @@
       const bounds = leaflet.featureGroup([propertyMarker, selectedCollegeMarker]).getBounds();
       map.fitBounds(bounds, { padding: [28, 28], maxZoom: 15 });
     }
+    enableScrollSafeMap(map, container);
     return map;
   }
 
