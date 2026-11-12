@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="origin-when-cross-origin">
   <title>Browse Student PGs | RentDirect Faridabad</title>
   <meta name="description" content="Explore verified student PGs and hostels near Manav Rachna and other Faridabad colleges.">
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     .listings-page-layout {
       display: grid;
@@ -75,60 +76,74 @@
       grid-column: 1 / -1;
     }
 
-    .property-footer {
+    .listings-map-panel {
+      margin: 0 0 1.5rem;
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      background: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .listings-map-heading {
+      display: flex;
+      justify-content: space-between;
       align-items: flex-start;
-      flex-wrap: wrap;
-      gap: 0.75rem;
+      gap: 1rem;
+      margin-bottom: 0.8rem;
     }
 
-    .price-container {
-      flex: 1 1 100%;
+    .listings-map-heading h2 {
+      color: var(--brand-neutral);
+      font-size: 1rem;
+      font-weight: 800;
     }
 
-    .listing-cost-breakdown {
-      display: grid;
-      gap: 0.35rem;
-      margin-top: 0.5rem;
-      color: var(--text-secondary);
+    .listings-map-heading p,
+    .map-legend {
+      color: var(--text-muted);
       font-size: 0.75rem;
     }
 
-    .listing-cost-breakdown > div {
+    .map-legend {
       display: flex;
-      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 0.65rem;
+    }
+
+    .map-legend span {
+      display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.35rem;
     }
 
-    .listing-cost-breakdown > div > span:last-child {
-      text-align: right;
-      white-space: nowrap;
+    .map-legend i {
+      width: 0.65rem;
+      height: 0.65rem;
+      border-radius: 50%;
     }
 
-    .cost-badge {
-      display: inline-block;
-      margin-left: 0.15rem;
-      padding: 0.12rem 0.3rem;
-      border-radius: 999px;
-      font-size: 0.58rem;
-      font-weight: 800;
-      letter-spacing: 0.01em;
-      vertical-align: middle;
+    .map-legend .pg-dot {
+      background: #2563eb;
     }
 
-    .cost-badge.confirmed {
-      color: #166534;
-      background: #dcfce7;
+    .map-legend .college-dot {
+      background: #e11d48;
     }
 
-    .cost-badge.owner-stated {
-      color: #854d0e;
-      background: #fef3c7;
+    #listings-map {
+      height: 360px;
+      width: 100%;
+      border-radius: var(--radius-md);
+      background: var(--bg-surface-alt);
+      z-index: 1;
     }
 
-    .cost-badge.estimated {
-      color: #92400e;
-      background: #fef3c7;
+    .commute-disclaimer {
+      margin-top: 0.7rem;
+      color: var(--text-muted);
+      font-size: 0.7rem;
     }
 
     @media (max-width: 900px) {
@@ -139,7 +154,18 @@
         position: static;
       }
     }
+
+    @media (max-width: 600px) {
+      #listings-map {
+        height: 290px;
+      }
+
+      .listings-map-heading {
+        flex-direction: column;
+      }
+    }
   </style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 </head>
 <body>
 
@@ -288,6 +314,21 @@
           </div>
         </div>
 
+        <section class="listings-map-panel" aria-labelledby="listings-map-title">
+          <div class="listings-map-heading">
+            <div>
+              <h2 id="listings-map-title">PGs &amp; Faridabad campuses</h2>
+              <p>Explore available listings and nearby colleges on the map.</p>
+            </div>
+          </div>
+          <div id="listings-map" role="application" aria-label="Map of PG listings and colleges in Faridabad"></div>
+          <div class="map-legend" aria-label="Map legend">
+            <span><i class="pg-dot"></i> PG listing</span>
+            <span><i class="college-dot"></i> College campus</span>
+          </div>
+          <p class="commute-disclaimer" id="map-listing-coverage">Map pins are approximate. Walking times and daily return fares are estimates, not live routes or quotes.</p>
+        </section>
+
         <!-- Cards Grid -->
         <div id="listings-grid" class="property-grid">
           <!-- Populated by JS -->
@@ -315,6 +356,8 @@
   <!-- Scripts -->
   <script src="js/config.js"></script>
   <script src="js/mock-data.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="js/maps.js"></script>
   <script src="js/api.js"></script>
   <script src="js/app.js"></script>
 
@@ -491,11 +534,24 @@
             </button>
           </div>
         `;
+        updateListingsMap(items);
         return;
       }
 
       countEl.textContent = `Showing ${items.length} verified accommodation${items.length > 1 ? 's' : ''}`;
-      grid.innerHTML = items.map(p => RentDirectUI.createPropertyCardHTML(p)).join('');
+      const selectedCollegeId = document.getElementById('filter-college')?.value || 'all';
+      grid.innerHTML = items.map(p => RentDirectUI.createPropertyCardHTML(p, { collegeId: selectedCollegeId })).join('');
+      updateListingsMap(items, selectedCollegeId);
+    }
+
+    function updateListingsMap(items, selectedCollegeId = document.getElementById('filter-college')?.value || 'all') {
+      const mapContainer = document.getElementById('listings-map');
+      if (!mapContainer || !window.RentDirectMap) return;
+      RentDirectMap.createListingsMap(mapContainer, items, selectedCollegeId);
+      const coverage = document.getElementById('map-listing-coverage');
+      if (coverage) {
+        coverage.textContent = 'Listings without exact coordinates are shown with approximate Faridabad pins near their associated college. Walking times and fares are estimates, not live routes or quotes.';
+      }
     }
   </script>
 </body>

@@ -33,6 +33,8 @@ const CONFIG = {
       name: 'Manav Rachna (MRIIRS / MRU)',
       shortName: 'Manav Rachna',
       location: 'Sector 43, Surajkund Road, Faridabad',
+      latitude: 28.4508,
+      longitude: 77.2794,
       landmark: 'Near Aravali Hills',
       pgCount: 42,
       featured: true
@@ -42,6 +44,8 @@ const CONFIG = {
       name: 'J.C. Bose UST (YMCA)',
       shortName: 'JC Bose YMCA',
       location: 'Sector 6, Mathura Road, Faridabad',
+      latitude: 28.3674,
+      longitude: 77.3167,
       landmark: 'Escorts Mujesar Metro Station',
       pgCount: 38,
       featured: true
@@ -51,6 +55,8 @@ const CONFIG = {
       name: "Lingaya's Vidyapeeth",
       shortName: "Lingaya's",
       location: 'Nachauli, Jasana Road, Faridabad',
+      latitude: 28.4080,
+      longitude: 77.3820,
       landmark: 'Old Faridabad Zone',
       pgCount: 24,
       featured: true
@@ -60,6 +66,8 @@ const CONFIG = {
       name: 'Echelon Institute of Technology',
       shortName: 'Echelon Tech',
       location: 'Kabulpur, Kheri-Manjhawali Road, Faridabad',
+      latitude: 28.3370,
+      longitude: 77.3930,
       landmark: 'Greater Faridabad',
       pgCount: 16,
       featured: false
@@ -69,6 +77,8 @@ const CONFIG = {
       name: 'Al-Falah University',
       shortName: 'Al-Falah',
       location: 'Dhauj, Faridabad',
+      latitude: 28.2670,
+      longitude: 77.2780,
       landmark: 'Sohna Road link',
       pgCount: 12,
       featured: false
@@ -78,6 +88,8 @@ const CONFIG = {
       name: 'DAV Institute of Management',
       shortName: 'DAVIM',
       location: 'NH-3, NIT Faridabad',
+      latitude: 28.3950,
+      longitude: 77.2970,
       landmark: 'Near BK Chowk',
       pgCount: 19,
       featured: false

@@ -42,9 +42,10 @@ async function refreshVisiblePropertyCards() {
   try {
     const properties = await RentDirectAPI.getProperties();
     const byId = new Map(properties.map(property => [String(property.id), property]));
+    const selectedCollegeId = document.getElementById('filter-college')?.value || 'all';
     document.querySelectorAll('.property-card[data-id]').forEach(card => {
       const property = byId.get(String(card.dataset.id));
-      if (property) card.outerHTML = createPropertyCardHTML(property);
+      if (property) card.outerHTML = createPropertyCardHTML(property, { collegeId: selectedCollegeId });
     });
   } catch (error) {
     console.error('Unable to refresh property review badges', error);
@@ -87,19 +88,30 @@ function initCollegeDropdowns() {
 // -----------------------------------------------------------------------------
 // 3. PROPERTY CARD MARKUP GENERATOR
 // -----------------------------------------------------------------------------
-function createPropertyCardHTML(property) {
+function createPropertyCardHTML(property, options = {}) {
   const genderClass = property.gender === 'boys' ? 'boys' : (property.gender === 'girls' ? 'girls' : 'unisex');
   const genderLabel = property.gender.toUpperCase() + ' PG';
   const cost = getTrueCostBreakdown(property);
   const chargesReviewed = isPropertyReviewed(property);
-  const fixedChargeBadge = chargesReviewed ? '[CONFIRMED]' : '[OWNER STATED]';
+  const fixedChargeBadge = chargesReviewed ? 'CONFIRMED' : 'OWNER STATED';
   const fixedChargeClass = chargesReviewed ? 'confirmed' : 'owner-stated';
   const review = getPropertyReviewBadge(property);
+  const commute = options.collegeId && options.collegeId !== 'all'
+    ? window.RentDirectMap?.getCommuteEstimate(property, options.collegeId)
+    : null;
 
   const amenitiesBadges = (property.amenities || [])
     .slice(0, 4)
     .map(a => `<span class="amenity-chip">${a}</span>`)
     .join('');
+  const commuteMarkup = commute ? `
+        <div class="property-commute" aria-label="Estimated commute to selected college">
+          ${commute.approximate ? '<span class="property-commute-note">Approximate location estimate</span>' : ''}
+          <div><span>Distance</span><strong>${commute.distance}</strong></div>
+          <div><span>Walk</span><strong>${commute.walkingTime}</strong></div>
+          <div><span>Auto / e-rickshaw</span><strong>${commute.dailyFare}<small>/day return</small></strong></div>
+        </div>
+  ` : '';
 
   return `
     <article class="property-card" data-id="${property.id}">
@@ -115,6 +127,7 @@ function createPropertyCardHTML(property) {
         <p class="property-address">
           <span>📍</span> ${property.distanceToCollege || property.address}
         </p>
+        ${commuteMarkup}
         <div class="amenities-pills">
           ${amenitiesBadges}
         </div>
@@ -123,13 +136,13 @@ function createPropertyCardHTML(property) {
             <span class="price-label">True-Cost View · monthly</span>
             <span class="price-value">₹${cost.monthlyTotal.toLocaleString('en-IN')} <span>/month</span></span>
             <div class="listing-cost-breakdown">
-              <div><span>Base Rent</span><span>₹${cost.baseRent.toLocaleString('en-IN')} <b class="cost-badge ${fixedChargeClass}">${fixedChargeBadge}</b></span></div>
-              <div><span>Mess</span><span>₹${cost.messCharge.toLocaleString('en-IN')} <b class="cost-badge ${fixedChargeClass}">${fixedChargeBadge}</b></span></div>
-              <div><span>Maintenance</span><span>₹${cost.maintenanceCharge.toLocaleString('en-IN')} <b class="cost-badge ${fixedChargeClass}">${fixedChargeBadge}</b></span></div>
-              <div><span>Utilities · baseline</span><span>₹${cost.utilities.toLocaleString('en-IN')} <b class="cost-badge estimated">[ESTIMATED]</b></span></div>
+              <div><span class="cost-label">Base Rent</span><b class="cost-badge ${fixedChargeClass}">${fixedChargeBadge}</b><span class="cost-amount">₹${cost.baseRent.toLocaleString('en-IN')}</span></div>
+              <div><span class="cost-label">Mess</span><b class="cost-badge ${fixedChargeClass}">${fixedChargeBadge}</b><span class="cost-amount">₹${cost.messCharge.toLocaleString('en-IN')}</span></div>
+              <div><span class="cost-label">Maintenance</span><b class="cost-badge ${fixedChargeClass}">${fixedChargeBadge}</b><span class="cost-amount">₹${cost.maintenanceCharge.toLocaleString('en-IN')}</span></div>
+              <div><span class="cost-label">Utilities</span><b class="cost-badge estimated">ESTIMATED</b><span class="cost-amount">₹${cost.utilities.toLocaleString('en-IN')}</span></div>
             </div>
           </div>
-          <a href="property-details.html?id=${property.id}" class="btn btn-outline btn-sm">View Details</a>
+          <a href="property-details.html?id=${property.id}" class="property-details-button">View Details <span aria-hidden="true">→</span></a>
         </div>
       </div>
     </article>

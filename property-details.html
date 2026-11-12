@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="origin-when-cross-origin">
   <title>Property Details | RentDirect</title>
   <meta name="description" content="View verified student PG details, room photos, monthly rent, and direct owner contact.">
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     .specs-grid {
       display: grid;
@@ -70,6 +71,35 @@
       border-radius: var(--radius-lg);
       padding: 1.5rem;
       box-shadow: var(--shadow-lg);
+    }
+
+    .property-map-card {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      background: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .property-map-card h2 {
+      color: var(--brand-neutral);
+      font-size: 1.1rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .property-map-card p {
+      color: var(--text-muted);
+      font-size: 0.76rem;
+      margin-bottom: 0.75rem;
+    }
+
+    #property-map {
+      height: 340px;
+      width: 100%;
+      border-radius: var(--radius-md);
+      background: var(--bg-surface-alt);
+      z-index: 1;
     }
 
     .owner-profile-header {
@@ -240,6 +270,7 @@
       margin: 0.75rem 0 1rem;
     }
   </style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 </head>
 <body>
 
@@ -306,11 +337,14 @@
   <!-- Scripts -->
   <script src="js/config.js"></script>
   <script src="js/mock-data.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="js/maps.js"></script>
   <script src="js/api.js"></script>
   <script src="js/app.js"></script>
 
   <script>
     let currentPropertyDetails = null;
+    let propertyDetailsMap = null;
 
     document.addEventListener('DOMContentLoaded', async () => {
       const urlParams = new URLSearchParams(window.location.search);
@@ -431,6 +465,12 @@
               </div>
             </div>
           </div>
+
+          <section class="property-map-card" aria-labelledby="property-map-title">
+            <h2 id="property-map-title">PG location &amp; nearby campuses</h2>
+            <p>Listings without exact coordinates use an approximate pin near their associated college.</p>
+            <div id="property-map" role="application" aria-label="Map showing the PG listing and nearby colleges"></div>
+          </section>
 
           <!-- Quick Specifications Matrix -->
           <div class="specs-grid">
@@ -631,7 +671,16 @@
         </div>
       `;
 
+      if (propertyDetailsMap) {
+        propertyDetailsMap.remove();
+        propertyDetailsMap = null;
+      }
       document.getElementById('details-content').innerHTML = content;
+      const propertyMapElement = document.getElementById('property-map');
+      if (propertyMapElement && window.RentDirectMap) {
+        propertyDetailsMap = RentDirectMap.createPropertyMap(propertyMapElement, item);
+        if (propertyDetailsMap) setTimeout(() => propertyDetailsMap.invalidateSize(), 0);
+      }
       const currentUser = RentDirectAPI.getCurrentUser();
       document.getElementById('inq-name').value = currentUser?.name || '';
       document.getElementById('inq-email').value = currentUser?.email || '';

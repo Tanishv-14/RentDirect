@@ -61,11 +61,17 @@ html {
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: var(--bg-page);
   color: var(--text-primary);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6,
+.property-title,
+.price-value {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
 }
 
 img {
@@ -1093,8 +1099,9 @@ button, input, select, textarea {
 .property-footer {
   margin-top: auto;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
   padding-top: 1rem;
   border-top: 1px solid var(--border-light);
 }
@@ -1102,24 +1109,202 @@ button, input, select, textarea {
 .price-container {
   display: flex;
   flex-direction: column;
+  gap: 0.2rem;
 }
 
 .price-label {
   font-size: 0.7rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
 }
 
 .price-value {
-  font-size: 1.25rem;
+  font-size: 1.75rem;
   font-weight: 800;
   color: var(--brand-primary);
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.035em;
 }
 
 .price-value span {
-  font-size: 0.8rem;
-  font-weight: 500;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
   color: var(--text-secondary);
+  letter-spacing: 0;
+}
+
+.listing-cost-breakdown {
+  display: grid;
+  gap: 0.15rem;
+  margin-top: 0.6rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, rgba(248, 250, 252, 0.9), rgba(239, 246, 255, 0.55));
+}
+
+.listing-cost-breakdown > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(3.75rem, auto);
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 1.8rem;
+}
+
+.cost-label {
+  min-width: 0;
+  color: var(--text-secondary);
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.cost-badge {
+  justify-self: start;
+  padding: 0.18rem 0.42rem;
+  border-radius: var(--radius-full);
+  font-size: 0.55rem;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: 0.035em;
+  white-space: nowrap;
+}
+
+.cost-badge.confirmed {
+  color: #15803d;
+  background: #dcfce7;
+}
+
+.cost-badge.owner-stated {
+  color: #b45309;
+  background: #fef3c7;
+}
+
+.cost-badge.estimated {
+  color: #0369a1;
+  background: #e0f2fe;
+}
+
+.cost-amount {
+  color: var(--brand-neutral);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.property-details-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.65rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: var(--radius-md);
+  background: linear-gradient(115deg, var(--brand-primary), #0ea5e9 58%, var(--brand-secondary));
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  transition: var(--transition);
+}
+
+.property-details-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 22px rgba(37, 99, 235, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.property-details-button span {
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.property-details-button:hover span {
+  transform: translateX(3px);
+}
+
+.property-commute {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin: 0.1rem 0 0.85rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgba(37, 99, 235, 0.14);
+  border-radius: var(--radius-md);
+  background: linear-gradient(120deg, #eff6ff, #f0fdfa);
+}
+
+.property-commute > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  min-width: 0;
+}
+
+.property-commute-note {
+  grid-column: 1 / -1;
+  color: var(--text-muted);
+  font-size: 0.6rem;
+  font-weight: 600;
+}
+
+.property-commute > div > span {
+  color: var(--text-secondary);
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.property-commute strong {
+  color: var(--brand-neutral);
+  font-size: 0.76rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.property-commute small {
+  margin-left: 0.18rem;
+  color: var(--text-muted);
+  font-size: 0.57rem;
+  font-weight: 500;
+}
+
+.rentdirect-map-pin {
+  background: transparent;
+  border: 0;
+}
+
+.rentdirect-map-pin span {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.4);
+}
+
+.rentdirect-map-pin-property span {
+  background: #2563eb;
+}
+
+.rentdirect-map-pin-college span {
+  background: #e11d48;
+}
+
+.map-unavailable {
+  display: grid;
+  min-height: 100%;
+  place-items: center;
+  padding: 1rem;
+  color: var(--text-secondary);
+  text-align: center;
 }
 
 /* ==========================================================================
